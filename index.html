@@ -1089,6 +1089,12 @@ html.privacy-mode .brand-name {
   opacity: 0.6;
   pointer-events: none;
 }
+/* Hero title uses background-clip:text gradient — blur the outer span */
+html.privacy-mode .hero-title span {
+  filter: blur(12px);
+  -webkit-filter: blur(12px);
+  opacity: 0.5;
+}
 html.privacy-mode title { visibility: hidden; }
 
 /* ═══════════════════════════════════════════════════════
