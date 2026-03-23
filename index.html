@@ -1021,6 +1021,77 @@ tbody tr:last-child td {
 }
 
 /* ═══════════════════════════════════════════════════════
+   PRIVACY TOGGLE — blur brand name for screen sharing
+   ═══════════════════════════════════════════════════════ */
+
+.privacy-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  margin-left: auto;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+  border-left: 1px solid var(--border-subtle);
+}
+
+.privacy-toggle-track {
+  width: 36px;
+  height: 20px;
+  border-radius: 10px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-medium);
+  position: relative;
+  transition: background 0.25s ease, border-color 0.25s ease;
+}
+
+.privacy-toggle-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: transform 0.25s ease, background 0.25s ease;
+}
+
+.privacy-toggle-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  transition: color 0.25s ease;
+}
+
+/* Active state */
+html.privacy-mode .privacy-toggle-track {
+  background: rgba(99,102,241,0.2);
+  border-color: var(--accent);
+}
+html.privacy-mode .privacy-toggle-thumb {
+  transform: translateX(16px);
+  background: var(--accent);
+}
+html.privacy-mode .privacy-toggle-label {
+  color: var(--accent);
+}
+
+/* Brand name blur effect */
+.brand-name {
+  transition: filter 0.3s ease, opacity 0.3s ease;
+}
+html.privacy-mode .brand-name {
+  filter: blur(8px);
+  -webkit-filter: blur(8px);
+  opacity: 0.6;
+  pointer-events: none;
+}
+html.privacy-mode title { visibility: hidden; }
+
+/* ═══════════════════════════════════════════════════════
    PRINT STYLESHEET
    ═══════════════════════════════════════════════════════ */
 
@@ -1082,7 +1153,7 @@ tbody tr:last-child td {
      ═══════════════════════════════════════════════════════ -->
 <nav class="sticky-nav" id="nav">
   <div class="nav-inner">
-    <div class="nav-brand">LYV AM/PM</div>
+    <div class="nav-brand"><span class="brand-name">LYV AM/PM</span></div>
     <a href="#exec-summary" class="nav-link">Summary</a>
     <a href="#brand-positioning" class="nav-link">Brands</a>
     <a href="#ad-gallery" class="nav-link">Ads</a>
@@ -1093,6 +1164,10 @@ tbody tr:last-child td {
     <a href="#ad-scripts" class="nav-link">Scripts</a>
     <a href="#video-ads" class="nav-link">Video</a>
     <a href="#methodology" class="nav-link">Method</a>
+    <div class="privacy-toggle" id="privacyToggle" role="switch" aria-checked="false" aria-label="Privacy mode — blur brand name" tabindex="0">
+      <span class="privacy-toggle-label">🔒 Privacy</span>
+      <div class="privacy-toggle-track"><div class="privacy-toggle-thumb"></div></div>
+    </div>
   </div>
 </nav>
 
@@ -1103,7 +1178,7 @@ tbody tr:last-child td {
   <div class="container">
     <div class="hero-content reveal">
       <div class="hero-eyebrow">Competitive Ad Intelligence Report</div>
-      <h1 class="hero-title"><span>Lyv AM/PM</span></h1>
+      <h1 class="hero-title"><span><span class="brand-name">Lyv AM/PM</span></span></h1>
       <p class="hero-date">March 22, 2026 &mdash; Competitive Intelligence Report</p>
 
       <div class="stats-bar">
@@ -1140,7 +1215,7 @@ tbody tr:last-child td {
     <div class="reveal">
       <div class="section-label">Section 02</div>
       <h2 class="section-title">Executive Summary</h2>
-      <p class="section-subtitle">Strategic overview of competitive landscape, key findings, and highest-value opportunities for Lyv AM/PM market entry.</p>
+      <p class="section-subtitle">Strategic overview of competitive landscape, key findings, and highest-value opportunities for <span class="brand-name">Lyv AM/PM</span> market entry.</p>
     </div>
 
     <div class="card-grid" style="margin-bottom: 1.5rem;">
@@ -1148,7 +1223,7 @@ tbody tr:last-child td {
         <div class="exec-icon red-icon">!</div>
         <div class="exec-text">
           <h4>24 Pain Points, 18 Unaddressed</h4>
-          <p>24 unique customer pain points identified across 5 competitors. 18 are completely unaddressed by any brand &mdash; a massive white space for Lyv AM/PM.</p>
+          <p>24 unique customer pain points identified across 5 competitors. 18 are completely unaddressed by any brand &mdash; a massive white space for <span class="brand-name">Lyv AM/PM</span>.</p>
         </div>
       </div>
 
@@ -1156,7 +1231,7 @@ tbody tr:last-child td {
         <div class="exec-icon accent-icon">&#9734;</div>
         <div class="exec-text">
           <h4>#1 Unoccupied Position: Circadian Biology</h4>
-          <p>No competitor frames their supplement around the body's daily rhythm. Opportunity Score: 25. This is Lyv AM/PM's strongest strategic opening.</p>
+          <p>No competitor frames their supplement around the body's daily rhythm. Opportunity Score: 25. This is <span class="brand-name">Lyv AM/PM</span>&rsquo;s strongest strategic opening.</p>
         </div>
       </div>
 
@@ -1172,7 +1247,7 @@ tbody tr:last-child td {
         <div class="exec-icon green-icon">&#10003;</div>
         <div class="exec-text">
           <h4>Dual-Formula Advantage</h4>
-          <p>Lyv AM/PM's AM+PM format is shared only by 3.0 Rise &amp; Restore. But no competitor uses circadian science positioning &mdash; the lane is wide open.</p>
+          <p><span class="brand-name">Lyv AM/PM</span>&rsquo;s AM+PM format is shared only by 3.0 Rise &amp; Restore. But no competitor uses circadian science positioning &mdash; the lane is wide open.</p>
         </div>
       </div>
     </div>
@@ -1586,7 +1661,7 @@ tbody tr:last-child td {
     <!-- ──────────────────────────────────────────────────
          Thesis — 9 Active Ads
          ────────────────────────────────────────────────── -->
-    <h3 class="reveal" style="margin-top:2rem; margin-bottom:0.5rem;">Thesis <span style="font-size:13px; color:var(--text-muted); font-weight:400; font-family:var(--font-body);">&mdash; 9 active ads &middot; Direct competitor to Lyv 3.0 Rise &amp; Restore</span></h3>
+    <h3 class="reveal" style="margin-top:2rem; margin-bottom:0.5rem;">Thesis <span style="font-size:13px; color:var(--text-muted); font-weight:400; font-family:var(--font-body);">&mdash; 9 active ads &middot; Direct competitor to <span class="brand-name">Lyv</span> 3.0 Rise &amp; Restore</span></h3>
     <div style="font-size:13px; color:var(--text-secondary); margin-bottom:1.25rem;" class="reveal">Key themes: Dopamine depletion hooks, nootropics positioning, clinical dosing transparency, anti-laziness empathy, executive dysfunction reframe</div>
 
     <div class="card-grid" style="margin-bottom:3rem;">
@@ -1731,9 +1806,9 @@ tbody tr:last-child td {
 
     <!-- Thesis Insights Box -->
     <div class="insights-box reveal" style="margin-bottom:3rem;">
-      <div class="insights-title">Thesis Ad Intelligence Summary (CRITICAL &mdash; Direct Lyv 3.0 Competitor)</div>
+      <div class="insights-title">Thesis Ad Intelligence Summary (CRITICAL &mdash; Direct <span class="brand-name">Lyv</span> 3.0 Competitor)</div>
       <ul class="insights-list">
-        <li>DIRECT COMPETITOR to Lyv 3.0 Rise &amp; Restore &mdash; same nootropics/focus category, same audience</li>
+        <li>DIRECT COMPETITOR to <span class="brand-name">Lyv</span> 3.0 Rise &amp; Restore &mdash; same nootropics/focus category, same audience</li>
         <li>Dopamine depletion is their #1 hook framework &mdash; "You're not lazy," "cheap dopamine is frying your focus"</li>
         <li>Radical ingredient transparency &mdash; every milligram disclosed, no proprietary blends (trust-building counter to industry norms)</li>
         <li>Video-dominant strategy (5 of 9 ads are video) with UGC-style first-person narratives</li>
@@ -2121,7 +2196,7 @@ tbody tr:last-child td {
     <div class="reveal">
       <div class="section-label">Section 07 &mdash; Hero</div>
       <h2 class="section-title">Gap Analysis Matrix</h2>
-      <p class="section-subtitle">The competitive landscape at a glance. Red cells represent critical gaps no competitor addresses. This is where Lyv AM/PM wins.</p>
+      <p class="section-subtitle">The competitive landscape at a glance. Red cells represent critical gaps no competitor addresses. This is where <span class="brand-name">Lyv AM/PM</span> wins.</p>
     </div>
 
     <div class="reveal" style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
@@ -2384,7 +2459,7 @@ tbody tr:last-child td {
         <li><span style="color:var(--red);">&#10060; Red</span> = Critical gap &mdash; competitor does NOT address this pain point</li>
         <li><span style="color:var(--amber);">&#9888;&#65039; Amber</span> = Moderate &mdash; partially addressed or only implicit</li>
         <li><span style="color:var(--green);">&#9989; Green</span> = Covered &mdash; competitor actively addresses this</li>
-        <li>Top 5 rows highlighted in red &mdash; highest-value gaps for Lyv AM/PM</li>
+        <li>Top 5 rows highlighted in red &mdash; highest-value gaps for <span class="brand-name">Lyv AM/PM</span></li>
       </ul>
     </div>
   </div>
@@ -2398,7 +2473,7 @@ tbody tr:last-child td {
     <div class="reveal">
       <div class="section-label">Section 08</div>
       <h2 class="section-title">Unoccupied Positions</h2>
-      <p class="section-subtitle">Five strategic positions no competitor has claimed. Each represents a high-value lane for Lyv AM/PM to own.</p>
+      <p class="section-subtitle">Five strategic positions no competitor has claimed. Each represents a high-value lane for <span class="brand-name">Lyv AM/PM</span> to own.</p>
     </div>
 
     <div class="card-grid-3">
@@ -2507,14 +2582,14 @@ tbody tr:last-child td {
             <div class="beat-time">4&ndash;6s</div>
             <div>
               <div class="beat-label">Solution</div>
-              <div class="beat-text">Lyv AM/PM &mdash; two formulas built around circadian biology. AM activates. PM restores.</div>
+              <div class="beat-text"><span class="brand-name">Lyv AM/PM</span> &mdash; two formulas built around circadian biology. AM activates. PM restores.</div>
             </div>
           </div>
           <div class="script-beat">
             <div class="beat-time">6&ndash;8s</div>
             <div>
               <div class="beat-label">CTA</div>
-              <div class="beat-text">"Built for how your body actually works. Try Lyv AM/PM risk-free."</div>
+              <div class="beat-text">"Built for how your body actually works. Try <span class="brand-name">Lyv AM/PM</span> risk-free."</div>
             </div>
           </div>
         </div>
@@ -2661,7 +2736,7 @@ tbody tr:last-child td {
           </video>
         </div>
         <div class="video-meta">
-          <div class="video-title">"My Morning Routine with Lyv"</div>
+          <div class="video-title">"My Morning Routine with <span class="brand-name">Lyv</span>"</div>
           <div class="video-detail"><strong>Style:</strong> UGC &mdash; Authentic, phone-filmed, creator testimonial</div>
           <div class="video-detail"><strong>Gap Targeted:</strong> Relatability &amp; Social Proof</div>
           <div class="video-detail"><strong>Format:</strong> 8s &bull; 1080p &bull; 9:16 vertical &bull; Product photo reference</div>
@@ -2736,8 +2811,8 @@ tbody tr:last-child td {
      ═══════════════════════════════════════════════════════ -->
 <footer class="footer">
   <div class="container">
-    <p class="footer-text">LYV AM/PM &mdash; COMPETITIVE AD INTELLIGENCE REPORT &mdash; MARCH 22, 2026</p>
-    <p class="footer-text" style="margin-top:6px; opacity:0.5;">Lyv AM/PM Competitive Intelligence &bull; 14 Data Sources</p>
+    <p class="footer-text"><span class="brand-name">LYV AM/PM</span> &mdash; COMPETITIVE AD INTELLIGENCE REPORT &mdash; MARCH 22, 2026</p>
+    <p class="footer-text" style="margin-top:6px; opacity:0.5;"><span class="brand-name">Lyv AM/PM</span> Competitive Intelligence &bull; 14 Data Sources</p>
   </div>
 </footer>
 
@@ -2843,6 +2918,26 @@ tbody tr:last-child td {
     });
   });
 
+  // ──────────────────────────────────────────────────────
+  // PRIVACY TOGGLE — blur/hide brand name for screen sharing
+  // ──────────────────────────────────────────────────────
+  var privacyToggle = document.getElementById('privacyToggle');
+  var originalTitle = document.title;
+
+  if (privacyToggle) {
+    privacyToggle.addEventListener('click', function() {
+      var isActive = document.documentElement.classList.toggle('privacy-mode');
+      privacyToggle.setAttribute('aria-checked', isActive ? 'true' : 'false');
+      document.title = isActive ? 'Competitive Ad Intelligence Report' : originalTitle;
+    });
+
+    privacyToggle.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        privacyToggle.click();
+      }
+    });
+  }
 
 })();
 </script>
