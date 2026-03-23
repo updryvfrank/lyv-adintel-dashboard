@@ -2925,8 +2925,67 @@ html.privacy-mode title { visibility: hidden; }
   });
 
   // ──────────────────────────────────────────────────────
-  // PRIVACY TOGGLE — blur/hide brand name for screen sharing
+  // PRIVACY TOGGLE — blur all brands + AM/PM for screen sharing
   // ──────────────────────────────────────────────────────
+
+  // Auto-wrap brand names and AM/PM in .brand-name spans
+  (function wrapBrandNames() {
+    var brands = [
+      'Lyv AM\\/PM', 'LYV AM\\/PM',
+      'AM\\/PM', 'AM\\+PM',
+      'Athletic Greens',
+      'Magic Mind',
+      'Rise & Restore', 'Rise &amp; Restore',
+      'Youngevity',
+      'Beckham',
+      'Thesis',
+      'Beam',
+      'AG1',
+      'IM8',
+      'Lyv', 'LYV'
+    ];
+    // Build regex — longer patterns first to avoid partial matches
+    var pattern = new RegExp('(' + brands.join('|') + ')', 'g');
+
+    function walkNode(node) {
+      if (node.nodeType === 3) { // Text node
+        var text = node.textContent;
+        if (!pattern.test(text)) return;
+        pattern.lastIndex = 0;
+        // Skip if parent is already a brand-name span, script, style, or source
+        var parent = node.parentNode;
+        if (!parent) return;
+        var tag = parent.tagName;
+        if (tag === 'SCRIPT' || tag === 'STYLE' || tag === 'SOURCE' || tag === 'TITLE') return;
+        if (parent.classList && parent.classList.contains('brand-name')) return;
+
+        var frag = document.createDocumentFragment();
+        var parts = text.split(pattern);
+        parts.forEach(function(part) {
+          if (pattern.test(part)) {
+            pattern.lastIndex = 0;
+            var span = document.createElement('span');
+            span.className = 'brand-name';
+            span.textContent = part;
+            frag.appendChild(span);
+          } else if (part) {
+            frag.appendChild(document.createTextNode(part));
+          }
+        });
+        parent.replaceChild(frag, node);
+      } else if (node.nodeType === 1) { // Element node
+        var tag2 = node.tagName;
+        if (tag2 === 'SCRIPT' || tag2 === 'STYLE' || tag2 === 'SOURCE') return;
+        if (node.classList && node.classList.contains('brand-name')) return;
+        // Snapshot children since we mutate
+        var children = Array.prototype.slice.call(node.childNodes);
+        children.forEach(walkNode);
+      }
+    }
+    walkNode(document.body);
+  })();
+
+  // Toggle handler
   var privacyToggle = document.getElementById('privacyToggle');
   var originalTitle = document.title;
 
