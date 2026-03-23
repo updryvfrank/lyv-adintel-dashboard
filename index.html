@@ -658,60 +658,6 @@ tbody tr:last-child td {
   line-height: 1.6;
 }
 
-/* ═══════════════════════════════════════════════════════
-   COST BREAKDOWN
-   ═══════════════════════════════════════════════════════ */
-
-.cost-bar-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 10px;
-}
-
-.cost-bar-label {
-  width: 200px;
-  font-size: 13px;
-  color: var(--text-secondary);
-  text-align: right;
-  flex-shrink: 0;
-}
-
-.cost-bar-track {
-  flex: 1;
-  height: 28px;
-  background: var(--bg-elevated);
-  border-radius: 6px;
-  overflow: hidden;
-  position: relative;
-}
-
-.cost-bar-fill {
-  height: 100%;
-  border-radius: 6px;
-  background: linear-gradient(90deg, var(--accent), #818CF8);
-  display: flex;
-  align-items: center;
-  padding-left: 10px;
-  font-size: 11px;
-  font-weight: 700;
-  color: white;
-  min-width: fit-content;
-  transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.cost-bar-fill.gold-fill {
-  background: linear-gradient(90deg, var(--gold), #E8C898);
-}
-
-.cost-bar-amount {
-  width: 80px;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-primary);
-  text-align: right;
-  flex-shrink: 0;
-  font-family: var(--font-mono);
-}
 
 /* ═══════════════════════════════════════════════════════
    BRAND CARDS
@@ -1068,7 +1014,6 @@ tbody tr:last-child td {
   .gap-header, .gap-cell { padding: 8px 6px; }
   .gap-cell { font-size: 14px; }
   .gap-cell.pain-label { font-size: 11px; }
-  .cost-bar-label { width: 120px; font-size: 11px; }
   .exec-callout { flex-direction: column; }
   .total-card { flex-direction: column; text-align: center; }
   .total-stats { justify-content: center; }
@@ -1089,7 +1034,6 @@ tbody tr:last-child td {
   .reveal { opacity: 1 !important; transform: none !important; }
   .gap-matrix { font-size: 10px; }
   .hero-title span { -webkit-text-fill-color: #333; background: none; }
-  .cost-bar-fill { background: #6366F1 !important; }
   .footer { margin-top: 2rem; }
 }
 
@@ -1148,8 +1092,6 @@ tbody tr:last-child td {
     <a href="#unoccupied" class="nav-link">Opportunities</a>
     <a href="#ad-scripts" class="nav-link">Scripts</a>
     <a href="#video-ads" class="nav-link">Video</a>
-    <a href="#apify" class="nav-link">Apify</a>
-    <a href="#cost" class="nav-link">Cost</a>
     <a href="#methodology" class="nav-link">Method</a>
   </div>
 </nav>
@@ -1184,10 +1126,6 @@ tbody tr:last-child td {
         <div class="stat-item">
           <div class="stat-value">0</div>
           <div class="stat-label">Meta Ads Scraped</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-value accent">$0.80</div>
-          <div class="stat-label">Total Research Cost</div>
         </div>
       </div>
     </div>
@@ -1323,7 +1261,7 @@ tbody tr:last-child td {
     <div class="reveal">
       <div class="section-label">Section 04</div>
       <h2 class="section-title">Competitor Ad Gallery</h2>
-      <p class="section-subtitle">42 live Facebook ads scraped via Apify on March 23, 2026 &mdash; real ad copy, formats, and CTAs from active competitor campaigns.</p>
+      <p class="section-subtitle">42 live Facebook ads from active competitor campaigns &mdash; real ad copy, formats, and CTAs.</p>
     </div>
 
     <!-- ──────────────────────────────────────────────────
@@ -2733,154 +2671,15 @@ tbody tr:last-child td {
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════
-     SECTION 11: APIFY DATA SUMMARY
-     ═══════════════════════════════════════════════════════ -->
-<section id="apify">
-  <div class="container">
-    <div class="reveal">
-      <div class="section-label">Section 11</div>
-      <h2 class="section-title">Apify Data Summary</h2>
-    </div>
 
-    <div class="card reveal" style="max-width:800px;">
-      <div style="display:flex; align-items:center; gap:16px; margin-bottom:1.25rem;">
-        <div style="width:48px; height:48px; border-radius:10px; background:var(--green-bg); border:1px solid var(--green-border); display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0;">&#10003;</div>
-        <div>
-          <h3 style="margin-bottom:2px;">Scrape Successful</h3>
-          <p style="font-size:14px; color:var(--text-secondary);">Meta Ad Library scraped 42 active competitor ads via apify/facebook-ads-scraper.</p>
-        </div>
-      </div>
-
-      <div style="font-size:13px; color:var(--text-secondary); line-height:1.7; margin-bottom:1.5rem;">
-        <strong style="color:var(--text-accent);">Scraper:</strong> apify/facebook-ads-scraper<br>
-        <strong style="color:var(--text-accent);">Run Date:</strong> March 23, 2026<br>
-        <strong style="color:var(--text-accent);">Total Ads Pulled:</strong> 42<br>
-        <strong style="color:var(--text-accent);">Brands Queried:</strong> 6 (AG1, IM8, Thesis, Beam, Youngevity, Magic Mind)<br>
-        <strong style="color:var(--text-accent);">Status:</strong> <span style="color:var(--green); font-weight:600;">Complete &mdash; all data integrated into Section 4 Ad Gallery</span>
-      </div>
-
-      <!-- Per-brand breakdown -->
-      <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap:12px; margin-bottom:1.5rem;">
-        <div style="background:var(--bg-elevated); border-radius:8px; padding:12px 16px;">
-          <div style="font-size:11px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-muted); margin-bottom:4px;">AG1</div>
-          <div style="font-size:1.5rem; font-weight:800; color:var(--green); font-family:var(--font-display);">19 <span style="font-size:12px; color:var(--text-muted); font-weight:400;">ads</span></div>
-          <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">Celebrity endorsement, morning ritual, Next Gen clinical</div>
-        </div>
-        <div style="background:var(--bg-elevated); border-radius:8px; padding:12px 16px;">
-          <div style="font-size:11px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-muted); margin-bottom:4px;">IM8</div>
-          <div style="font-size:1.5rem; font-weight:800; color:var(--accent); font-family:var(--font-display);">10 <span style="font-size:12px; color:var(--text-muted); font-weight:400;">ads</span></div>
-          <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">16-supplement replacement, Beckham, menopause targeting</div>
-        </div>
-        <div style="background:var(--bg-elevated); border-radius:8px; padding:12px 16px;">
-          <div style="font-size:11px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-muted); margin-bottom:4px;">Thesis</div>
-          <div style="font-size:1.5rem; font-weight:800; color:var(--red); font-family:var(--font-display);">9 <span style="font-size:12px; color:var(--text-muted); font-weight:400;">ads</span></div>
-          <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">Dopamine hooks, nootropics, clinical dosing transparency</div>
-        </div>
-        <div style="background:var(--bg-elevated); border-radius:8px; padding:12px 16px;">
-          <div style="font-size:11px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-muted); margin-bottom:4px;">Beam</div>
-          <div style="font-size:1.5rem; font-weight:800; color:var(--gold); font-family:var(--font-display);">2 <span style="font-size:12px; color:var(--text-muted); font-weight:400;">ads</span></div>
-          <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">Sleep product, magnesium/reishi/L-theanine</div>
-        </div>
-        <div style="background:var(--bg-elevated); border-radius:8px; padding:12px 16px;">
-          <div style="font-size:11px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-muted); margin-bottom:4px;">Youngevity</div>
-          <div style="font-size:1.5rem; font-weight:800; color:var(--text-muted); font-family:var(--font-display);">2 <span style="font-size:12px; color:var(--text-muted); font-weight:400;">ads</span></div>
-          <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">Generic posts, no supplement-specific ads</div>
-        </div>
-        <div style="background:var(--bg-elevated); border-radius:8px; padding:12px 16px;">
-          <div style="font-size:11px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-muted); margin-bottom:4px;">Magic Mind</div>
-          <div style="font-size:1.5rem; font-weight:800; color:var(--text-muted); font-family:var(--font-display);">0 <span style="font-size:12px; color:var(--text-muted); font-weight:400;">ads</span></div>
-          <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">No active Facebook ads found</div>
-        </div>
-      </div>
-
-      <!-- Key Messaging Themes -->
-      <div style="background:var(--bg-elevated); border-radius:8px; padding:16px 20px;">
-        <div style="font-size:11px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--accent); margin-bottom:10px;">Key Messaging Themes Across All Brands</div>
-        <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap:8px; font-size:12px; color:var(--text-secondary);">
-          <div style="padding:6px 0;"><span style="color:var(--green); margin-right:6px;">&#9679;</span> Celebrity/founder authority (Jackman, Beckham)</div>
-          <div style="padding:6px 0;"><span style="color:var(--green); margin-right:6px;">&#9679;</span> Morning routine ritual positioning</div>
-          <div style="padding:6px 0;"><span style="color:var(--green); margin-right:6px;">&#9679;</span> Clinical backing &amp; transparency</div>
-          <div style="padding:6px 0;"><span style="color:var(--accent); margin-right:6px;">&#9679;</span> Dopamine depletion / executive dysfunction</div>
-          <div style="padding:6px 0;"><span style="color:var(--accent); margin-right:6px;">&#9679;</span> Supplement consolidation (replace 16)</div>
-          <div style="padding:6px 0;"><span style="color:var(--accent); margin-right:6px;">&#9679;</span> Free gift / welcome kit offer stacking</div>
-          <div style="padding:6px 0;"><span style="color:var(--gold); margin-right:6px;">&#9679;</span> Sleep quality without side effects</div>
-          <div style="padding:6px 0;"><span style="color:var(--gold); margin-right:6px;">&#9679;</span> Carousel-dominant ad format strategy</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
 
 <!-- ═══════════════════════════════════════════════════════
-     SECTION 12: COST BREAKDOWN
-     ═══════════════════════════════════════════════════════ -->
-<section id="cost">
-  <div class="container">
-    <div class="reveal">
-      <div class="section-label">Section 12</div>
-      <h2 class="section-title">Cost Breakdown</h2>
-      <p class="section-subtitle">Total production cost for this intelligence report. $4.18 under the $5.00 budget.</p>
-    </div>
-
-    <div class="card reveal" style="max-width: 800px;">
-      <div class="cost-bar-row">
-        <div class="cost-bar-label">Apify Scrape (42 ads)</div>
-        <div class="cost-bar-track"><div class="cost-bar-fill" style="width:12%;">12%</div></div>
-        <div class="cost-bar-amount">$0.10</div>
-      </div>
-
-      <div class="cost-bar-row">
-        <div class="cost-bar-label">Veo Video 1 (Circadian)</div>
-        <div class="cost-bar-track"><div class="cost-bar-fill gold-fill" style="width:30%;">30%</div></div>
-        <div class="cost-bar-amount">$0.24</div>
-      </div>
-
-      <div class="cost-bar-row">
-        <div class="cost-bar-label">Veo Video 2 (Proof)</div>
-        <div class="cost-bar-track"><div class="cost-bar-fill gold-fill" style="width:30%;">30%</div></div>
-        <div class="cost-bar-amount">$0.24</div>
-      </div>
-
-      <div class="cost-bar-row">
-        <div class="cost-bar-label">Veo Video 3 (Dropout)</div>
-        <div class="cost-bar-track"><div class="cost-bar-fill gold-fill" style="width:30%;">30%</div></div>
-        <div class="cost-bar-amount">$0.24</div>
-      </div>
-    </div>
-
-    <div class="total-card reveal">
-      <div>
-        <div class="total-label">Total Spend</div>
-        <div class="total-main">
-          <div class="total-value">$0.82</div>
-        </div>
-      </div>
-      <div class="total-stats">
-        <div class="total-stat">
-          <div class="total-stat-value">$5.00</div>
-          <div class="total-stat-label">Budget</div>
-        </div>
-        <div class="total-stat">
-          <div class="total-stat-value" style="color:var(--green);">$4.18</div>
-          <div class="total-stat-label">Under Budget</div>
-        </div>
-        <div class="total-stat">
-          <div class="total-stat-value">$0.033</div>
-          <div class="total-stat-label">Cost / Insight</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════════════════════════
-     SECTION 13: RESEARCH METHODOLOGY
+     SECTION 11: RESEARCH METHODOLOGY
      ═══════════════════════════════════════════════════════ -->
 <section id="methodology">
   <div class="container">
     <div class="reveal">
-      <div class="section-label">Section 13</div>
+      <div class="section-label">Section 11</div>
       <h2 class="section-title">Research Methodology</h2>
       <p class="section-subtitle">How this intelligence was gathered, processed, and synthesized.</p>
     </div>
@@ -2938,7 +2737,7 @@ tbody tr:last-child td {
 <footer class="footer">
   <div class="container">
     <p class="footer-text">LYV AM/PM &mdash; COMPETITIVE AD INTELLIGENCE REPORT &mdash; MARCH 22, 2026</p>
-    <p class="footer-text" style="margin-top:6px; opacity:0.5;">Lyv AM/PM Competitive Intelligence &bull; 14 Data Sources &bull; $0.80 Total Cost</p>
+    <p class="footer-text" style="margin-top:6px; opacity:0.5;">Lyv AM/PM Competitive Intelligence &bull; 14 Data Sources</p>
   </div>
 </footer>
 
@@ -3044,32 +2843,6 @@ tbody tr:last-child td {
     });
   });
 
-  // ──────────────────────────────────────────────────────
-  // ANIMATED COST BARS — trigger on visibility
-  // ──────────────────────────────────────────────────────
-  var costBars = document.querySelectorAll('.cost-bar-fill');
-
-  costBars.forEach(function(bar) {
-    var targetWidth = bar.style.width;
-    bar.style.width = '0%';
-
-    if ('IntersectionObserver' in window) {
-      var barObserver = new IntersectionObserver(function(entries) {
-        entries.forEach(function(entry) {
-          if (entry.isIntersecting) {
-            setTimeout(function() {
-              bar.style.width = targetWidth;
-            }, 200);
-            barObserver.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.3 });
-
-      barObserver.observe(bar);
-    } else {
-      bar.style.width = targetWidth;
-    }
-  });
 
 })();
 </script>
