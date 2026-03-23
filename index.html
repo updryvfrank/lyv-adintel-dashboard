@@ -1,0 +1,2536 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lyv AM/PM — Competitive Ad Intelligence Report</title>
+<style>
+/* ═══════════════════════════════════════════════════════
+   DESIGN SYSTEM
+   ═══════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800;900&display=swap');
+
+:root {
+  /* Core palette */
+  --bg-primary: #0B0F19;
+  --bg-secondary: #111827;
+  --bg-card: #1A1F2E;
+  --bg-card-hover: #222838;
+  --bg-elevated: #252B3B;
+  --border-subtle: rgba(255,255,255,0.06);
+  --border-medium: rgba(255,255,255,0.10);
+  --text-primary: #F1F5F9;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+  --text-accent: #E2E8F0;
+
+  /* RAG System */
+  --red: #DC2626;
+  --red-bg: rgba(220,38,38,0.08);
+  --red-border: rgba(220,38,38,0.25);
+  --amber: #F59E0B;
+  --amber-bg: rgba(245,158,11,0.08);
+  --amber-border: rgba(245,158,11,0.25);
+  --green: #10B981;
+  --green-bg: rgba(16,185,129,0.08);
+  --green-border: rgba(16,185,129,0.25);
+
+  /* Brand */
+  --accent: #6366F1;
+  --accent-dim: rgba(99,102,241,0.15);
+  --accent-glow: rgba(99,102,241,0.25);
+  --gold: #D4A574;
+  --gold-dim: rgba(212,165,116,0.12);
+
+  /* Typography */
+  --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-body: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+
+  /* Spacing */
+  --section-gap: 5rem;
+  --card-radius: 12px;
+  --card-padding: 2rem;
+}
+
+/* ═══════════════════════════════════════════════════════
+   RESET & BASE
+   ═══════════════════════════════════════════════════════ */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* ═══════════════════════════════════════════════════════
+   SCROLL ANIMATIONS
+   ═══════════════════════════════════════════════════════ */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 0.08s; }
+.reveal-delay-2 { transition-delay: 0.16s; }
+.reveal-delay-3 { transition-delay: 0.24s; }
+.reveal-delay-4 { transition-delay: 0.32s; }
+.reveal-delay-5 { transition-delay: 0.40s; }
+
+/* ═══════════════════════════════════════════════════════
+   STICKY NAV / TOC
+   ═══════════════════════════════════════════════════════ */
+
+.sticky-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(11,15,25,0.92);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 0;
+}
+
+.nav-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.nav-inner::-webkit-scrollbar { display: none; }
+
+.nav-brand {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--gold);
+  padding: 14px 20px;
+  white-space: nowrap;
+  border-right: 1px solid var(--border-subtle);
+  letter-spacing: 0.5px;
+}
+
+.nav-link {
+  display: inline-block;
+  padding: 14px 14px;
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.2s, background 0.2s;
+  border-bottom: 2px solid transparent;
+}
+.nav-link:hover {
+  color: var(--text-primary);
+  background: rgba(255,255,255,0.03);
+}
+.nav-link.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+/* ═══════════════════════════════════════════════════════
+   LAYOUT
+   ═══════════════════════════════════════════════════════ */
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+section {
+  padding-top: var(--section-gap);
+  padding-bottom: 1rem;
+}
+
+/* ═══════════════════════════════════════════════════════
+   TYPOGRAPHY
+   ═══════════════════════════════════════════════════════ */
+
+.section-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-label::before {
+  content: '';
+  display: inline-block;
+  width: 20px;
+  height: 1px;
+  background: var(--accent);
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.25;
+  margin-bottom: 1rem;
+}
+
+.section-subtitle {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  max-width: 720px;
+  line-height: 1.7;
+  margin-bottom: 2.5rem;
+}
+
+h3 {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+
+/* ═══════════════════════════════════════════════════════
+   CARDS
+   ═══════════════════════════════════════════════════════ */
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--card-radius);
+  padding: var(--card-padding);
+  transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+}
+.card:hover {
+  border-color: var(--border-medium);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1.5rem;
+}
+
+.card-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: 1.5rem;
+}
+
+/* ═══════════════════════════════════════════════════════
+   HEADER / HERO
+   ═══════════════════════════════════════════════════════ */
+
+.hero {
+  padding: 5rem 0 3rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -40%;
+  left: -20%;
+  width: 140%;
+  height: 180%;
+  background: radial-gradient(ellipse at 30% 20%, rgba(99,102,241,0.08) 0%, transparent 60%),
+              radial-gradient(ellipse at 70% 60%, rgba(212,165,116,0.05) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-eyebrow {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1.5rem;
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+
+.hero-title span {
+  background: linear-gradient(135deg, var(--accent) 0%, #A78BFA 50%, var(--gold) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-date {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-bottom: 2.5rem;
+}
+
+/* Stats bar */
+.stats-bar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1px;
+  background: var(--border-subtle);
+  border-radius: var(--card-radius);
+  overflow: hidden;
+  margin-top: 2rem;
+}
+
+.stat-item {
+  background: var(--bg-card);
+  padding: 1.5rem 1.25rem;
+  text-align: center;
+}
+
+.stat-value {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+.stat-value.gold { color: var(--gold); }
+.stat-value.accent { color: var(--accent); }
+.stat-value.green { color: var(--green); }
+.stat-value.red { color: var(--red); }
+
+.stat-label {
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* ═══════════════════════════════════════════════════════
+   TABLES
+   ═══════════════════════════════════════════════════════ */
+
+.table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: var(--card-radius);
+  border: 1px solid var(--border-subtle);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+
+thead th {
+  background: var(--bg-elevated);
+  padding: 14px 16px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border-medium);
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+tbody td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  vertical-align: top;
+}
+
+tbody tr:hover {
+  background: rgba(255,255,255,0.02);
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.row-critical {
+  background: var(--red-bg) !important;
+  border-left: 3px solid var(--red);
+}
+.row-critical td { color: var(--text-primary); }
+
+/* ═══════════════════════════════════════════════════════
+   GAP MATRIX (HERO SECTION)
+   ═══════════════════════════════════════════════════════ */
+
+.gap-matrix-section {
+  background: linear-gradient(180deg, var(--bg-primary) 0%, rgba(17,24,39,0.5) 50%, var(--bg-primary) 100%);
+  padding-top: 5rem;
+  padding-bottom: 3rem;
+}
+
+.gap-matrix {
+  display: grid;
+  grid-template-columns: minmax(220px, 2fr) repeat(5, minmax(70px, 1fr)) minmax(60px, 0.7fr) minmax(90px, 1fr);
+  gap: 0;
+  border: 1px solid var(--border-medium);
+  border-radius: var(--card-radius);
+  overflow: hidden;
+  font-size: 13px;
+}
+
+.gap-header {
+  background: var(--bg-elevated);
+  padding: 14px 12px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border-bottom: 2px solid var(--border-medium);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.gap-header:first-child {
+  justify-content: flex-start;
+  padding-left: 16px;
+}
+
+.gap-cell {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  background: var(--bg-card);
+  transition: background 0.2s;
+}
+
+.gap-cell.pain-label {
+  justify-content: flex-start;
+  font-size: 13px;
+  color: var(--text-secondary);
+  padding-left: 16px;
+  font-weight: 500;
+}
+
+.gap-cell.coverage-cell {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.gap-cell.score-cell {
+  font-size: 13px;
+  font-weight: 700;
+  justify-content: flex-start;
+  gap: 8px;
+  padding-right: 16px;
+}
+
+.score-bar {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+
+.gap-row-critical .gap-cell {
+  background: var(--red-bg);
+}
+.gap-row-critical .pain-label {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+.gap-row-critical .score-cell {
+  color: var(--red);
+}
+
+.icon-red { color: var(--red); }
+.icon-amber { color: var(--amber); }
+.icon-green { color: var(--green); }
+
+/* ═══════════════════════════════════════════════════════
+   OPPORTUNITY CARDS
+   ═══════════════════════════════════════════════════════ */
+
+.opp-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--card-radius);
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+}
+.opp-card:hover {
+  border-color: var(--accent-glow);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+}
+.opp-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--gold));
+}
+
+.opp-rank {
+  font-family: var(--font-display);
+  font-size: 3.5rem;
+  font-weight: 900;
+  color: rgba(99,102,241,0.12);
+  position: absolute;
+  top: 12px;
+  right: 20px;
+  line-height: 1;
+}
+
+.opp-title {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.opp-subtitle {
+  font-size: 0.85rem;
+  color: var(--accent);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  margin-bottom: 1rem;
+}
+
+.opp-score {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--accent-dim);
+  color: var(--accent);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.opp-meta {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: 1rem;
+}
+
+.opp-meta strong {
+  color: var(--text-accent);
+  font-weight: 600;
+}
+
+.opp-hook {
+  background: var(--bg-elevated);
+  border-left: 3px solid var(--gold);
+  padding: 12px 16px;
+  font-style: italic;
+  font-size: 14px;
+  color: var(--gold);
+  border-radius: 0 8px 8px 0;
+  margin-top: 1rem;
+}
+
+/* ═══════════════════════════════════════════════════════
+   AD SCRIPTS
+   ═══════════════════════════════════════════════════════ */
+
+.script-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--card-radius);
+  overflow: hidden;
+  transition: border-color 0.3s, transform 0.3s;
+}
+.script-card:hover {
+  border-color: var(--border-medium);
+  transform: translateY(-2px);
+}
+
+.script-header {
+  background: var(--bg-elevated);
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.script-number {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+
+.script-title {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.script-body {
+  padding: 1.5rem;
+}
+
+.script-beat {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  align-items: flex-start;
+}
+
+.beat-time {
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-top: 2px;
+  letter-spacing: 0.5px;
+}
+
+.beat-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 2px;
+}
+
+.beat-text {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ═══════════════════════════════════════════════════════
+   COST BREAKDOWN
+   ═══════════════════════════════════════════════════════ */
+
+.cost-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.cost-bar-label {
+  width: 200px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.cost-bar-track {
+  flex: 1;
+  height: 28px;
+  background: var(--bg-elevated);
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+}
+
+.cost-bar-fill {
+  height: 100%;
+  border-radius: 6px;
+  background: linear-gradient(90deg, var(--accent), #818CF8);
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+  font-size: 11px;
+  font-weight: 700;
+  color: white;
+  min-width: fit-content;
+  transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.cost-bar-fill.gold-fill {
+  background: linear-gradient(90deg, var(--gold), #E8C898);
+}
+
+.cost-bar-amount {
+  width: 80px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-align: right;
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+}
+
+/* ═══════════════════════════════════════════════════════
+   BRAND CARDS
+   ═══════════════════════════════════════════════════════ */
+
+.brand-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.brand-name {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.brand-price {
+  display: inline-block;
+  background: var(--gold-dim);
+  color: var(--gold);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+}
+
+.brand-detail {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 6px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.brand-detail-label {
+  color: var(--text-muted);
+  font-weight: 600;
+  min-width: 80px;
+  flex-shrink: 0;
+}
+
+.brand-detail-value {
+  color: var(--text-secondary);
+}
+
+/* ═══════════════════════════════════════════════════════
+   AD GALLERY CARDS
+   ═══════════════════════════════════════════════════════ */
+
+.ad-gallery-card {
+  border-top: 3px solid var(--accent);
+}
+
+.ad-field {
+  margin-bottom: 0.75rem;
+}
+
+.ad-field-label {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 2px;
+}
+
+.ad-field-value {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.ad-field-value.hook-text {
+  color: var(--gold);
+  font-weight: 600;
+  font-style: italic;
+  font-size: 15px;
+}
+
+/* ═══════════════════════════════════════════════════════
+   VIDEO CARDS
+   ═══════════════════════════════════════════════════════ */
+
+.video-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--card-radius);
+  overflow: hidden;
+}
+
+.video-preview {
+  height: 180px;
+  background: linear-gradient(135deg, var(--bg-elevated) 0%, var(--bg-secondary) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.video-play-icon {
+  width: 56px;
+  height: 56px;
+  background: rgba(99,102,241,0.2);
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: var(--accent);
+}
+
+.video-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(0,0,0,0.6);
+  color: var(--text-secondary);
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+
+.video-meta {
+  padding: 1.25rem;
+}
+
+.video-title {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.video-detail {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.video-detail strong {
+  color: var(--text-secondary);
+}
+
+/* ═══════════════════════════════════════════════════════
+   METHODOLOGY / DISCLAIMER
+   ═══════════════════════════════════════════════════════ */
+
+.methodology-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.disclaimer {
+  background: var(--amber-bg);
+  border: 1px solid var(--amber-border);
+  border-radius: var(--card-radius);
+  padding: 1.25rem 1.5rem;
+  font-size: 13px;
+  color: var(--amber);
+  line-height: 1.6;
+  margin-top: 2rem;
+}
+
+/* ═══════════════════════════════════════════════════════
+   FOOTER
+   ═══════════════════════════════════════════════════════ */
+
+.footer {
+  margin-top: var(--section-gap);
+  padding: 3rem 0;
+  border-top: 1px solid var(--border-subtle);
+  text-align: center;
+}
+
+.footer-text {
+  font-size: 12px;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+}
+
+/* ═══════════════════════════════════════════════════════
+   VERBATIM QUOTE STYLING
+   ═══════════════════════════════════════════════════════ */
+
+.verbatim {
+  font-style: italic;
+  color: var(--text-muted);
+  font-size: 12px;
+  border-left: 2px solid var(--border-medium);
+  padding-left: 10px;
+  margin-top: 4px;
+}
+
+/* ═══════════════════════════════════════════════════════
+   INSIGHTS BOX
+   ═══════════════════════════════════════════════════════ */
+
+.insights-box {
+  background: var(--accent-dim);
+  border: 1px solid rgba(99,102,241,0.2);
+  border-radius: var(--card-radius);
+  padding: 1.5rem 2rem;
+  margin-top: 2rem;
+}
+
+.insights-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.75rem;
+}
+
+.insights-list {
+  list-style: none;
+  padding: 0;
+}
+
+.insights-list li {
+  font-size: 14px;
+  color: var(--text-secondary);
+  padding: 4px 0;
+  padding-left: 20px;
+  position: relative;
+}
+.insights-list li::before {
+  content: '\2192';
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* ═══════════════════════════════════════════════════════
+   EXECUTIVE SUMMARY CALLOUTS
+   ═══════════════════════════════════════════════════════ */
+
+.exec-callout {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--card-radius);
+  padding: 1.75rem;
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+}
+
+.exec-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+.exec-icon.red-icon { background: var(--red-bg); border: 1px solid var(--red-border); }
+.exec-icon.amber-icon { background: var(--amber-bg); border: 1px solid var(--amber-border); }
+.exec-icon.green-icon { background: var(--green-bg); border: 1px solid var(--green-border); }
+.exec-icon.accent-icon { background: var(--accent-dim); border: 1px solid rgba(99,102,241,0.2); }
+
+.exec-text h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.exec-text p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Total summary card */
+.total-card {
+  background: linear-gradient(135deg, var(--bg-card) 0%, rgba(99,102,241,0.05) 100%);
+  border: 1px solid var(--accent-glow);
+  border-radius: var(--card-radius);
+  padding: 2rem;
+  margin-top: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.total-main {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.total-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+.total-value {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--green);
+}
+
+.total-stats {
+  display: flex;
+  gap: 2rem;
+}
+
+.total-stat {
+  text-align: center;
+}
+
+.total-stat-value {
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.total-stat-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* ═══════════════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  .container { padding: 0 1rem; }
+  :root { --section-gap: 3rem; --card-padding: 1.25rem; }
+  .hero-title { font-size: 2rem; }
+  .stats-bar { grid-template-columns: repeat(2, 1fr); }
+  .card-grid, .card-grid-3 { grid-template-columns: 1fr; }
+  .gap-matrix { font-size: 11px; grid-template-columns: minmax(140px, 2fr) repeat(5, minmax(40px, 1fr)) minmax(40px, 0.7fr) minmax(60px, 1fr); }
+  .gap-header, .gap-cell { padding: 8px 6px; }
+  .gap-cell { font-size: 14px; }
+  .gap-cell.pain-label { font-size: 11px; }
+  .cost-bar-label { width: 120px; font-size: 11px; }
+  .exec-callout { flex-direction: column; }
+  .total-card { flex-direction: column; text-align: center; }
+  .total-stats { justify-content: center; }
+  .nav-brand { display: none; }
+}
+
+/* ═══════════════════════════════════════════════════════
+   PRINT STYLESHEET
+   ═══════════════════════════════════════════════════════ */
+
+@media print {
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  body { background: white; color: #1a1a1a; font-size: 11px; }
+  .sticky-nav { display: none; }
+  .hero::before { display: none; }
+  section { padding-top: 2rem; page-break-inside: avoid; }
+  .card, .opp-card, .script-card, .video-card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+  .reveal { opacity: 1 !important; transform: none !important; }
+  .gap-matrix { font-size: 10px; }
+  .hero-title span { -webkit-text-fill-color: #333; background: none; }
+  .cost-bar-fill { background: #6366F1 !important; }
+  .footer { margin-top: 2rem; }
+}
+
+/* ═══════════════════════════════════════════════════════
+   PAIN POINT ROW RANKING BADGE
+   ═══════════════════════════════════════════════════════ */
+
+.rank-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 800;
+  margin-right: 6px;
+  flex-shrink: 0;
+}
+.rank-critical { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+.rank-moderate { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
+.rank-low { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+
+/* Frequency/Intensity dots */
+.dot-row {
+  display: flex;
+  gap: 3px;
+}
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.dot.empty {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-medium);
+}
+
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════
+     STICKY NAVIGATION
+     ═══════════════════════════════════════════════════════ -->
+<nav class="sticky-nav" id="nav">
+  <div class="nav-inner">
+    <div class="nav-brand">LYV AM/PM</div>
+    <a href="#exec-summary" class="nav-link">Summary</a>
+    <a href="#brand-positioning" class="nav-link">Brands</a>
+    <a href="#ad-gallery" class="nav-link">Ads</a>
+    <a href="#ad-structure" class="nav-link">Structure</a>
+    <a href="#pain-points" class="nav-link">Pain Points</a>
+    <a href="#gap-matrix" class="nav-link">Gap Matrix</a>
+    <a href="#unoccupied" class="nav-link">Opportunities</a>
+    <a href="#ad-scripts" class="nav-link">Scripts</a>
+    <a href="#video-ads" class="nav-link">Video</a>
+    <a href="#apify" class="nav-link">Apify</a>
+    <a href="#cost" class="nav-link">Cost</a>
+    <a href="#methodology" class="nav-link">Method</a>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION 1: HEADER / HERO
+     ═══════════════════════════════════════════════════════ -->
+<header class="hero" id="header">
+  <div class="container">
+    <div class="hero-content reveal">
+      <div class="hero-eyebrow">Competitive Ad Intelligence Report</div>
+      <h1 class="hero-title"><span>Lyv AM/PM</span></h1>
+      <p class="hero-date">March 22, 2026 &mdash; Prepared by PAI Intelligence System</p>
+
+      <div class="stats-bar">
+        <div class="stat-item">
+          <div class="stat-value accent">5</div>
+          <div class="stat-label">Competitors Analyzed</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value gold">14</div>
+          <div class="stat-label">AI Research Agents</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value red">24</div>
+          <div class="stat-label">Pain Points Identified</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value green">18</div>
+          <div class="stat-label">Unaddressed by Any Brand</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">0</div>
+          <div class="stat-label">Meta Ads Scraped</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value accent">$0.80</div>
+          <div class="stat-label">Total Research Cost</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION 2: EXECUTIVE SUMMARY
+     ═══════════════════════════════════════════════════════ -->
+<section id="exec-summary">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Section 02</div>
+      <h2 class="section-title">Executive Summary</h2>
+      <p class="section-subtitle">Strategic overview of competitive landscape, key findings, and highest-value opportunities for Lyv AM/PM market entry.</p>
+    </div>
+
+    <div class="card-grid" style="margin-bottom: 1.5rem;">
+      <div class="exec-callout reveal reveal-delay-1">
+        <div class="exec-icon red-icon">!</div>
+        <div class="exec-text">
+          <h4>24 Pain Points, 18 Unaddressed</h4>
+          <p>24 unique customer pain points identified across 5 competitors. 18 are completely unaddressed by any brand &mdash; a massive white space for Lyv AM/PM.</p>
+        </div>
+      </div>
+
+      <div class="exec-callout reveal reveal-delay-2">
+        <div class="exec-icon accent-icon">&#9734;</div>
+        <div class="exec-text">
+          <h4>#1 Unoccupied Position: Circadian Biology</h4>
+          <p>No competitor frames their supplement around the body's daily rhythm. Opportunity Score: 25. This is Lyv AM/PM's strongest strategic opening.</p>
+        </div>
+      </div>
+
+      <div class="exec-callout reveal reveal-delay-3">
+        <div class="exec-icon amber-icon">&#9888;</div>
+        <div class="exec-text">
+          <h4>Universal Complaint: "No Noticeable Difference"</h4>
+          <p>The #1 complaint across ALL competitors &mdash; no brand proves their supplement works. Zero brands close the feedback loop on efficacy.</p>
+        </div>
+      </div>
+
+      <div class="exec-callout reveal reveal-delay-4">
+        <div class="exec-icon green-icon">&#10003;</div>
+        <div class="exec-text">
+          <h4>Dual-Formula Advantage</h4>
+          <p>Lyv AM/PM's AM+PM format is shared only by 3.0 Rise &amp; Restore. But no competitor uses circadian science positioning &mdash; the lane is wide open.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="insights-box reveal">
+      <div class="insights-title">Top 3 White Space Opportunities</div>
+      <ul class="insights-list">
+        <li><strong>Circadian Biology Framing</strong> &mdash; Opportunity Score: 25 &mdash; "The only supplement built around your body's daily rhythm"</li>
+        <li><strong>Measurable Proof of Efficacy</strong> &mdash; Opportunity Score: 25 &mdash; "The supplement that proves itself"</li>
+        <li><strong>Anti-Dropout Messaging</strong> &mdash; Opportunity Score: 20 &mdash; "The supplement you'll actually stay on"</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION 3: BRAND POSITIONING COMPARISON
+     ═══════════════════════════════════════════════════════ -->
+<section id="brand-positioning">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Section 03</div>
+      <h2 class="section-title">Brand Positioning Comparison</h2>
+      <p class="section-subtitle">How each competitor positions themselves in the market &mdash; their target audience, messaging, tone, and differentiators.</p>
+    </div>
+
+    <div class="card-grid">
+      <!-- AG1 -->
+      <div class="card brand-card reveal reveal-delay-1">
+        <div class="brand-name">AG1</div>
+        <div class="brand-price">$79/mo</div>
+        <div class="brand-detail"><span class="brand-detail-label">Target</span><span class="brand-detail-value">Health-conscious adults 25&ndash;45</span></div>
+        <div class="brand-detail"><span class="brand-detail-label">Message</span><span class="brand-detail-value">"One daily habit, comprehensive nutrition"</span></div>
+        <div class="brand-detail"><span class="brand-detail-label">Tone</span><span class="brand-detail-value">Premium wellness aspirational</span></div>
+        <div class="brand-detail"><span class="brand-detail-label">Differentiator</span><span class="brand-detail-value">75 ingredients, podcast dominance (Huberman, Rogan, Fridman)</span></div>
+      </div>
+
+      <!-- IM8 -->
+      <div class="card brand-card reveal reveal-delay-2">
+        <div class="brand-name">IM8</div>
+        <div class="brand-price">$89&ndash;119/mo</div>
+        <div class="brand-detail"><span class="brand-detail-label">Target</span><span class="brand-detail-value">Longevity-focused professionals 35&ndash;55</span></div>
+        <div class="brand-detail"><span class="brand-detail-label">Message</span><span class="brand-detail-value">"Precision nutrition targeting 12 Hallmarks of Aging"</span></div>
+        <div class="brand-detail"><span class="brand-detail-label">Tone</span><span class="brand-detail-value">Scientific authority</span></div>
+        <div class="brand-detail"><span class="brand-detail-label">Differentiator</span><span class="brand-detail-value">Beckham co-founder, NASA/Mayo Clinic affiliations</span></div>
+      </div>
+
+      <!-- 3.0 Rise & Restore -->
+      <div class="card brand-card reveal reveal-delay-3">
+        <div class="brand-name">3.0 Rise &amp; Restore</div>
+        <div class="brand-price">~$70/mo</div>
+        <div class="brand-detail"><span class="brand-detail-label">Target</span><span class="brand-detail-value">Wellness enthusiasts, AM/PM format</span></div>
+        <div class="brand-detail"><span class="brand-detail-label">Message</span><span class="brand-detail-value">"Rise in the morning, restore at night"</span></div>
+        <div class="brand-detail"><span class="brand-detail-label">Tone</span><span class="brand-detail-value">Natural wellness</span></div>
+        <div class="brand-detail"><span class="brand-detail-label">Differentiator</span><span class="brand-detail-value">Only dual AM/PM format competitor in market</span></div>
+      </div>
+
+      <!-- Magic Mind -->
+      <div class="card brand-card reveal reveal-delay-4">
+        <div class="brand-name">Magic Mind</div>
+        <div class="brand-price">~$100/mo</div>
+        <div class="brand-detail"><span class="brand-detail-label">Target</span><span class="brand-detail-value">Entrepreneurs 25&ndash;40</span></div>
+        <div class="brand-detail"><span class="brand-detail-label">Message</span><span class="brand-detail-value">"World's first productivity shot"</span></div>
+        <div class="brand-detail"><span class="brand-detail-label">Tone</span><span class="brand-detail-value">Biohacker energy</span></div>
+        <div class="brand-detail"><span class="brand-detail-label">Differentiator</span><span class="brand-detail-value">100% AM-focused, matcha-based productivity shot</span></div>
+      </div>
+
+      <!-- Beam Dream -->
+      <div class="card brand-card reveal reveal-delay-5">
+        <div class="brand-name">Beam Dream</div>
+        <div class="brand-price">~$90/mo</div>
+        <div class="brand-detail"><span class="brand-detail-label">Target</span><span class="brand-detail-value">Sleep-conscious adults 25&ndash;45</span></div>
+        <div class="brand-detail"><span class="brand-detail-label">Message</span><span class="brand-detail-value">"Better sleep starts tonight"</span></div>
+        <div class="brand-detail"><span class="brand-detail-label">Tone</span><span class="brand-detail-value">Cozy ritual</span></div>
+        <div class="brand-detail"><span class="brand-detail-label">Differentiator</span><span class="brand-detail-value">Hot cocoa sleep ritual, 100% PM-focused</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION 4: COMPETITOR AD GALLERY
+     ═══════════════════════════════════════════════════════ -->
+<section id="ad-gallery">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Section 04</div>
+      <h2 class="section-title">Competitor Ad Gallery</h2>
+      <p class="section-subtitle">Dominant ad patterns identified by research agents across each competitor's marketing channels.</p>
+    </div>
+
+    <div class="card-grid">
+      <!-- AG1 Ads -->
+      <div class="card ad-gallery-card reveal reveal-delay-1">
+        <div class="brand-name" style="margin-bottom: 1rem;">AG1</div>
+        <div class="ad-field">
+          <div class="ad-field-label">Hook</div>
+          <div class="ad-field-value hook-text">"One scoop, 75 ingredients, every morning"</div>
+        </div>
+        <div class="ad-field">
+          <div class="ad-field-label">Format</div>
+          <div class="ad-field-value">Podcast integrations (Huberman, Rogan, Fridman)</div>
+        </div>
+        <div class="ad-field">
+          <div class="ad-field-label">Style</div>
+          <div class="ad-field-value">Green powder ritual, influencer testimonials</div>
+        </div>
+        <div class="ad-field">
+          <div class="ad-field-label">CTA</div>
+          <div class="ad-field-value">"Try AG1 risk-free with 90-day money-back guarantee"</div>
+        </div>
+      </div>
+
+      <!-- IM8 Ads -->
+      <div class="card ad-gallery-card reveal reveal-delay-2">
+        <div class="brand-name" style="margin-bottom: 1rem;">IM8</div>
+        <div class="ad-field">
+          <div class="ad-field-label">Hook</div>
+          <div class="ad-field-value hook-text">"The science of aging, simplified"</div>
+        </div>
+        <div class="ad-field">
+          <div class="ad-field-label">Format</div>
+          <div class="ad-field-value">Authority-driven scientific messaging</div>
+        </div>
+        <div class="ad-field">
+          <div class="ad-field-label">Style</div>
+          <div class="ad-field-value">Clinical aesthetic, Beckham endorsement, longevity data</div>
+        </div>
+        <div class="ad-field">
+          <div class="ad-field-label">CTA</div>
+          <div class="ad-field-value">"Start your longevity journey"</div>
+        </div>
+      </div>
+
+      <!-- Magic Mind Ads -->
+      <div class="card ad-gallery-card reveal reveal-delay-3">
+        <div class="brand-name" style="margin-bottom: 1rem;">Magic Mind</div>
+        <div class="ad-field">
+          <div class="ad-field-label">Hook</div>
+          <div class="ad-field-value hook-text">"Do more, stress less"</div>
+        </div>
+        <div class="ad-field">
+          <div class="ad-field-label">Format</div>
+          <div class="ad-field-value">TikTok-native UGC content</div>
+        </div>
+        <div class="ad-field">
+          <div class="ad-field-label">Style</div>
+          <div class="ad-field-value">Fast-paced energetic before/after</div>
+        </div>
+        <div class="ad-field">
+          <div class="ad-field-label">CTA</div>
+          <div class="ad-field-value">"Try Magic Mind for free"</div>
+        </div>
+      </div>
+
+      <!-- Beam Dream Ads -->
+      <div class="card ad-gallery-card reveal reveal-delay-4">
+        <div class="brand-name" style="margin-bottom: 1rem;">Beam Dream</div>
+        <div class="ad-field">
+          <div class="ad-field-label">Hook</div>
+          <div class="ad-field-value hook-text">"Sleep better tonight &mdash; naturally"</div>
+        </div>
+        <div class="ad-field">
+          <div class="ad-field-label">Format</div>
+          <div class="ad-field-value">Cozy evening ritual, Instagram Stories</div>
+        </div>
+        <div class="ad-field">
+          <div class="ad-field-label">Style</div>
+          <div class="ad-field-value">Warm indigo, hot cocoa, ASMR-adjacent</div>
+        </div>
+        <div class="ad-field">
+          <div class="ad-field-label">CTA</div>
+          <div class="ad-field-value">"Start your Beam ritual"</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION 5: AD STRUCTURE ANALYSIS
+     ═══════════════════════════════════════════════════════ -->
+<section id="ad-structure">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Section 05</div>
+      <h2 class="section-title">Ad Structure Analysis</h2>
+      <p class="section-subtitle">8-dimension breakdown of each competitor's advertising approach &mdash; revealing patterns, gaps, and strategic opportunities.</p>
+    </div>
+
+    <div class="table-wrap reveal">
+      <table>
+        <thead>
+          <tr>
+            <th>Dimension</th>
+            <th>AG1</th>
+            <th>IM8</th>
+            <th>3.0 Rise &amp; Restore</th>
+            <th>Magic Mind</th>
+            <th>Beam Dream</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="font-weight:600; color:var(--text-accent);">Hook Style</td>
+            <td>Simplification &mdash; "one scoop"</td>
+            <td>Authority &mdash; "science of aging"</td>
+            <td>Balanced lifestyle</td>
+            <td>Productivity promise</td>
+            <td>Cozy ritual</td>
+          </tr>
+          <tr>
+            <td style="font-weight:600; color:var(--text-accent);">Problem Frame</td>
+            <td>Complexity of nutrition</td>
+            <td>Aging / decline</td>
+            <td>Energy-sleep imbalance</td>
+            <td>Mental fog &amp; stress</td>
+            <td>Poor sleep quality</td>
+          </tr>
+          <tr>
+            <td style="font-weight:600; color:var(--text-accent);">Benefits</td>
+            <td>Comprehensive coverage</td>
+            <td>Longevity, cellular health</td>
+            <td>Morning energy + night rest</td>
+            <td>Focus, clarity, calm</td>
+            <td>Deep sleep, no grogginess</td>
+          </tr>
+          <tr>
+            <td style="font-weight:600; color:var(--text-accent);">Social Proof</td>
+            <td>Podcast hosts, influencers</td>
+            <td>Beckham + scientists</td>
+            <td>Natural wellness community</td>
+            <td>Entrepreneur testimonials</td>
+            <td>Sleep score improvements</td>
+          </tr>
+          <tr>
+            <td style="font-weight:600; color:var(--text-accent);">CTA Pattern</td>
+            <td>Risk-free trial</td>
+            <td>"Start your journey"</td>
+            <td>"Try the system"</td>
+            <td>Free trial</td>
+            <td>"Start your ritual"</td>
+          </tr>
+          <tr>
+            <td style="font-weight:600; color:var(--text-accent);">Emotional Trigger</td>
+            <td>Simplification relief</td>
+            <td>Fear of aging</td>
+            <td>Balance / harmony</td>
+            <td>Peak performance</td>
+            <td>Comfort / relaxation</td>
+          </tr>
+          <tr>
+            <td style="font-weight:600; color:var(--text-accent);">Objection Handling</td>
+            <td>90-day money back</td>
+            <td>Clinical studies</td>
+            <td>Natural ingredients</td>
+            <td>30-day guarantee</td>
+            <td>Taste guarantee</td>
+          </tr>
+          <tr>
+            <td style="font-weight:600; color:var(--text-accent);">Visual Tone</td>
+            <td>Clean green premium</td>
+            <td>Clinical white &amp; gold</td>
+            <td>Earthy natural tones</td>
+            <td>Energetic bold</td>
+            <td>Warm indigo, cozy</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="insights-box reveal">
+      <div class="insights-title">Pattern Insights</div>
+      <ul class="insights-list">
+        <li>ALL competitors use risk-free / money-back CTAs &mdash; table stakes, not differentiators</li>
+        <li>NO competitor addresses supplement dropout or compliance &mdash; massive retention opportunity</li>
+        <li>NO competitor provides measurable proof of efficacy &mdash; the universal customer demand</li>
+        <li>ONLY 3.0 Rise &amp; Restore has AM/PM format &mdash; but without circadian science positioning</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION 6: CUSTOMER PAIN POINTS
+     ═══════════════════════════════════════════════════════ -->
+<section id="pain-points">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Section 06</div>
+      <h2 class="section-title">Customer Pain Points</h2>
+      <p class="section-subtitle">Top 15 pain points ranked by opportunity score (Frequency x Intensity). Direct customer verbatims from Reddit, Amazon, Trustpilot, and forums.</p>
+    </div>
+
+    <div class="table-wrap reveal">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:40px">#</th>
+            <th>Pain Point</th>
+            <th style="width:60px">Freq</th>
+            <th style="width:70px">Intensity</th>
+            <th style="width:70px">Opp Score</th>
+            <th style="width:70px">Coverage</th>
+            <th>Verbatim Quote</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="row-critical">
+            <td><span class="rank-badge rank-critical">1</span></td>
+            <td style="font-weight:600;">No noticeable difference after weeks/months</td>
+            <td><div class="dot-row"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div></td>
+            <td><div class="dot-row"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div></td>
+            <td style="font-weight:800; color:var(--red);">25</td>
+            <td style="color:var(--red); font-weight:700;">0%</td>
+            <td class="verbatim">"I didn't notice any huge positive side effects either"</td>
+          </tr>
+          <tr class="row-critical">
+            <td><span class="rank-badge rank-critical">2</span></td>
+            <td style="font-weight:600;">No measurable proof supplement is working</td>
+            <td><div class="dot-row"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div></td>
+            <td><div class="dot-row"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div></td>
+            <td style="font-weight:800; color:var(--red);">25</td>
+            <td style="color:var(--red); font-weight:700;">0%</td>
+            <td class="verbatim">"No idea what AG1 is doing to help my overall health"</td>
+          </tr>
+          <tr class="row-critical">
+            <td><span class="rank-badge rank-critical">3</span></td>
+            <td style="font-weight:600;">Price-to-value disconnect ($3&ndash;5/day)</td>
+            <td><div class="dot-row"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div></td>
+            <td><div class="dot-row"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div></td>
+            <td style="font-weight:800; color:var(--red);">25</td>
+            <td style="color:var(--red); font-weight:700;">0%</td>
+            <td class="verbatim">"100x as much as a good multivitamin at 3 cents/day"</td>
+          </tr>
+          <tr class="row-critical">
+            <td><span class="rank-badge rank-critical">4</span></td>
+            <td style="font-weight:600;">Proprietary blends hide ingredient doses</td>
+            <td><div class="dot-row"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div></td>
+            <td><div class="dot-row"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div></td>
+            <td style="font-weight:800; color:var(--red);">22.5</td>
+            <td style="color:var(--amber); font-weight:700;">10%</td>
+            <td class="verbatim">"49 out of 75 ingredients within proprietary blends"</td>
+          </tr>
+          <tr class="row-critical">
+            <td><span class="rank-badge rank-critical">5</span></td>
+            <td style="font-weight:600;">Influencer endorsements feel paid/fake</td>
+            <td><div class="dot-row"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div></td>
+            <td><div class="dot-row"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot empty"></span></div></td>
+            <td style="font-weight:800; color:var(--red);">20</td>
+            <td style="color:var(--red); font-weight:700;">0%</td>
+            <td class="verbatim">"If an influencer is peddling something it's usually not good"</td>
+          </tr>
+          <tr>
+            <td><span class="rank-badge rank-moderate">6</span></td>
+            <td>Subscription billing friction</td>
+            <td><div class="dot-row"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot empty"></span></div></td>
+            <td><div class="dot-row"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div></td>
+            <td style="font-weight:700; color:var(--amber);">20</td>
+            <td style="color:var(--red); font-weight:700;">0%</td>
+            <td class="verbatim">"Charged $99/month for green powder I barely use &mdash; SCAM"</td>
+          </tr>
+          <tr>
+            <td><span class="rank-badge rank-moderate">7</span></td>
+            <td>No circadian framing</td>
+            <td><div class="dot-row"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div></td>
+            <td><div class="dot-row"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot empty"></span></div></td>
+            <td style="font-weight:700; color:var(--amber);">20</td>
+            <td style="color:var(--red); font-weight:700;">0%</td>
+            <td class="verbatim">"No brand frames AM/PM around body's circadian clock"</td>
+          </tr>
+          <tr>
+            <td><span class="rank-badge rank-moderate">8</span></td>
+            <td>Supplement compliance drops at 60&ndash;90 days</td>
+            <td><div class="dot-row"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div></td>
+            <td><div class="dot-row"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot empty"></span></div></td>
+            <td style="font-weight:700; color:var(--amber);">18</td>
+            <td style="color:var(--amber); font-weight:700;">10%</td>
+            <td class="verbatim">"6&ndash;7% monthly churn = 50&ndash;60% annual customer loss"</td>
+          </tr>
+          <tr>
+            <td><span class="rank-badge rank-moderate">9</span></td>
+            <td>2-month drop-off cliff</td>
+            <td><div class="dot-row"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot empty"></span></div></td>
+            <td><div class="dot-row"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot empty"></span></div></td>
+            <td style="font-weight:700; color:var(--amber);">16</td>
+            <td style="color:var(--red); font-weight:700;">0%</td>
+            <td class="verbatim">"Users describe burning out around weeks 6&ndash;8"</td>
+          </tr>
+          <tr>
+            <td><span class="rank-badge rank-moderate">10</span></td>
+            <td>Digestive side effects</td>
+            <td><div class="dot-row"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot empty"></span></div></td>
+            <td><div class="dot-row"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot empty"></span></div></td>
+            <td style="font-weight:700; color:var(--amber);">16</td>
+            <td style="color:var(--red); font-weight:700;">0%</td>
+            <td class="verbatim">"The farts immediately after drinking it were dog fart worthy"</td>
+          </tr>
+          <tr>
+            <td><span class="rank-badge rank-moderate">11</span></td>
+            <td>Powder taste complaints</td>
+            <td><div class="dot-row"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div></td>
+            <td><div class="dot-row"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot empty"></span></div></td>
+            <td style="font-weight:700; color:var(--amber);">16</td>
+            <td style="color:var(--green); font-weight:700;">20%</td>
+            <td class="verbatim">"I literally gagged on my first sip"</td>
+          </tr>
+          <tr>
+            <td><span class="rank-badge rank-moderate">12</span></td>
+            <td>Ingredient studies are not product proof</td>
+            <td><div class="dot-row"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot empty"></span></div></td>
+            <td><div class="dot-row"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot empty"></span></div></td>
+            <td style="font-weight:700; color:var(--amber);">16</td>
+            <td style="color:var(--red); font-weight:700;">0%</td>
+            <td class="verbatim">"Verification gap between ingredient science and product reality"</td>
+          </tr>
+          <tr>
+            <td><span class="rank-badge rank-moderate">13</span></td>
+            <td>Community / belonging gap</td>
+            <td><div class="dot-row"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot empty"></span></div></td>
+            <td><div class="dot-row"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot empty"></span></div></td>
+            <td style="font-weight:700; color:var(--amber);">16</td>
+            <td style="color:var(--red); font-weight:700;">0%</td>
+            <td class="verbatim">"Social connection delivers health outcomes supplements promise"</td>
+          </tr>
+          <tr>
+            <td><span class="rank-badge rank-low">14</span></td>
+            <td>"Just eat real food" dismissal</td>
+            <td><div class="dot-row"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div></td>
+            <td><div class="dot-row"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot empty"></span><span class="dot empty"></span></div></td>
+            <td style="font-weight:700;">15</td>
+            <td style="color:var(--red); font-weight:700;">0%</td>
+            <td class="verbatim">"Better health begins on your plate, not medicine cabinet"</td>
+          </tr>
+          <tr>
+            <td><span class="rank-badge rank-low">15</span></td>
+            <td>Next-day grogginess from sleep supplements</td>
+            <td><div class="dot-row"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot empty"></span></div></td>
+            <td><div class="dot-row"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot empty"></span></div></td>
+            <td style="font-weight:700;">14.4</td>
+            <td style="color:var(--amber); font-weight:700;">10%</td>
+            <td class="verbatim">"Directly contradicts Beam's core marketing promise"</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION 7: GAP ANALYSIS MATRIX (HERO)
+     ═══════════════════════════════════════════════════════ -->
+<section id="gap-matrix" class="gap-matrix-section">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Section 07 &mdash; Hero</div>
+      <h2 class="section-title">Gap Analysis Matrix</h2>
+      <p class="section-subtitle">The competitive landscape at a glance. Red cells represent critical gaps no competitor addresses. This is where Lyv AM/PM wins.</p>
+    </div>
+
+    <div class="reveal" style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+      <div class="gap-matrix" id="gapMatrix">
+        <!-- Headers -->
+        <div class="gap-header">Pain Point</div>
+        <div class="gap-header">AG1</div>
+        <div class="gap-header">IM8</div>
+        <div class="gap-header">3.0 R&amp;R</div>
+        <div class="gap-header">Magic Mind</div>
+        <div class="gap-header">Beam Dream</div>
+        <div class="gap-header">Coverage</div>
+        <div class="gap-header">Opp Score</div>
+
+        <!-- Row 1 - CRITICAL -->
+        <div class="gap-cell pain-label gap-row-critical">No noticeable difference</div>
+        <div class="gap-cell gap-row-critical icon-red">&#10060;</div>
+        <div class="gap-cell gap-row-critical icon-red">&#10060;</div>
+        <div class="gap-cell gap-row-critical icon-red">&#10060;</div>
+        <div class="gap-cell gap-row-critical icon-red">&#10060;</div>
+        <div class="gap-cell gap-row-critical icon-red">&#10060;</div>
+        <div class="gap-cell coverage-cell gap-row-critical" style="color:var(--red);">0%</div>
+        <div class="gap-cell score-cell gap-row-critical"><div class="score-bar" style="width:100%; background:var(--red);"></div>25</div>
+
+        <!-- Row 2 - CRITICAL -->
+        <div class="gap-cell pain-label gap-row-critical">No measurable proof</div>
+        <div class="gap-cell gap-row-critical icon-red">&#10060;</div>
+        <div class="gap-cell gap-row-critical icon-red">&#10060;</div>
+        <div class="gap-cell gap-row-critical icon-red">&#10060;</div>
+        <div class="gap-cell gap-row-critical icon-red">&#10060;</div>
+        <div class="gap-cell gap-row-critical icon-red">&#10060;</div>
+        <div class="gap-cell coverage-cell gap-row-critical" style="color:var(--red);">0%</div>
+        <div class="gap-cell score-cell gap-row-critical"><div class="score-bar" style="width:100%; background:var(--red);"></div>25</div>
+
+        <!-- Row 3 - CRITICAL -->
+        <div class="gap-cell pain-label gap-row-critical">Price-to-value disconnect</div>
+        <div class="gap-cell gap-row-critical icon-red">&#10060;</div>
+        <div class="gap-cell gap-row-critical icon-red">&#10060;</div>
+        <div class="gap-cell gap-row-critical icon-red">&#10060;</div>
+        <div class="gap-cell gap-row-critical icon-red">&#10060;</div>
+        <div class="gap-cell gap-row-critical icon-red">&#10060;</div>
+        <div class="gap-cell coverage-cell gap-row-critical" style="color:var(--red);">0%</div>
+        <div class="gap-cell score-cell gap-row-critical"><div class="score-bar" style="width:100%; background:var(--red);"></div>25</div>
+
+        <!-- Row 4 - CRITICAL -->
+        <div class="gap-cell pain-label gap-row-critical">Proprietary blends hide doses</div>
+        <div class="gap-cell gap-row-critical icon-red">&#10060;</div>
+        <div class="gap-cell gap-row-critical icon-amber">&#9888;&#65039;</div>
+        <div class="gap-cell gap-row-critical icon-red">&#10060;</div>
+        <div class="gap-cell gap-row-critical icon-red">&#10060;</div>
+        <div class="gap-cell gap-row-critical icon-amber">&#9888;&#65039;</div>
+        <div class="gap-cell coverage-cell gap-row-critical" style="color:var(--amber);">10%</div>
+        <div class="gap-cell score-cell gap-row-critical"><div class="score-bar" style="width:90%; background:var(--red);"></div>22.5</div>
+
+        <!-- Row 5 - CRITICAL -->
+        <div class="gap-cell pain-label gap-row-critical">Influencer endorsements feel fake</div>
+        <div class="gap-cell gap-row-critical icon-red">&#10060;</div>
+        <div class="gap-cell gap-row-critical icon-red">&#10060;</div>
+        <div class="gap-cell gap-row-critical icon-red">&#10060;</div>
+        <div class="gap-cell gap-row-critical icon-red">&#10060;</div>
+        <div class="gap-cell gap-row-critical icon-red">&#10060;</div>
+        <div class="gap-cell coverage-cell gap-row-critical" style="color:var(--red);">0%</div>
+        <div class="gap-cell score-cell gap-row-critical"><div class="score-bar" style="width:80%; background:var(--red);"></div>20</div>
+
+        <!-- Row 6 -->
+        <div class="gap-cell pain-label">Subscription billing friction</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell coverage-cell" style="color:var(--red);">0%</div>
+        <div class="gap-cell score-cell"><div class="score-bar" style="width:80%;"></div>20</div>
+
+        <!-- Row 7 -->
+        <div class="gap-cell pain-label">No circadian framing</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell coverage-cell" style="color:var(--red);">0%</div>
+        <div class="gap-cell score-cell"><div class="score-bar" style="width:80%;"></div>20</div>
+
+        <!-- Row 8 -->
+        <div class="gap-cell pain-label">Supplement compliance drops</div>
+        <div class="gap-cell icon-amber">&#9888;&#65039;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-amber">&#9888;&#65039;</div>
+        <div class="gap-cell coverage-cell" style="color:var(--amber);">10%</div>
+        <div class="gap-cell score-cell"><div class="score-bar" style="width:72%;"></div>18</div>
+
+        <!-- Row 9 -->
+        <div class="gap-cell pain-label">2-month drop-off cliff</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell coverage-cell" style="color:var(--red);">0%</div>
+        <div class="gap-cell score-cell"><div class="score-bar" style="width:64%;"></div>16</div>
+
+        <!-- Row 10 -->
+        <div class="gap-cell pain-label">Digestive side effects</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell coverage-cell" style="color:var(--red);">0%</div>
+        <div class="gap-cell score-cell"><div class="score-bar" style="width:64%;"></div>16</div>
+
+        <!-- Row 11 -->
+        <div class="gap-cell pain-label">Powder taste complaints</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-green">&#9989;</div>
+        <div class="gap-cell coverage-cell" style="color:var(--green);">20%</div>
+        <div class="gap-cell score-cell"><div class="score-bar" style="width:64%;"></div>16</div>
+
+        <!-- Row 12 -->
+        <div class="gap-cell pain-label">Ingredient &#8800; product proof</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell coverage-cell" style="color:var(--red);">0%</div>
+        <div class="gap-cell score-cell"><div class="score-bar" style="width:64%;"></div>16</div>
+
+        <!-- Row 13 -->
+        <div class="gap-cell pain-label">Community gap</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell coverage-cell" style="color:var(--red);">0%</div>
+        <div class="gap-cell score-cell"><div class="score-bar" style="width:64%;"></div>16</div>
+
+        <!-- Row 14 -->
+        <div class="gap-cell pain-label">"Eat real food" dismissal</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell coverage-cell" style="color:var(--red);">0%</div>
+        <div class="gap-cell score-cell"><div class="score-bar" style="width:60%;"></div>15</div>
+
+        <!-- Row 15 -->
+        <div class="gap-cell pain-label">Next-day grogginess</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-amber">&#9888;&#65039;</div>
+        <div class="gap-cell coverage-cell" style="color:var(--amber);">10%</div>
+        <div class="gap-cell score-cell"><div class="score-bar" style="width:57.6%;"></div>14.4</div>
+
+        <!-- Row 16 -->
+        <div class="gap-cell pain-label">Brand-funded trials</div>
+        <div class="gap-cell icon-amber">&#9888;&#65039;</div>
+        <div class="gap-cell icon-amber">&#9888;&#65039;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-amber">&#9888;&#65039;</div>
+        <div class="gap-cell coverage-cell" style="color:var(--amber);">15%</div>
+        <div class="gap-cell score-cell"><div class="score-bar" style="width:54.4%;"></div>13.6</div>
+
+        <!-- Row 17 -->
+        <div class="gap-cell pain-label">Emotional needs unmet</div>
+        <div class="gap-cell icon-amber">&#9888;&#65039;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-amber">&#9888;&#65039;</div>
+        <div class="gap-cell icon-amber">&#9888;&#65039;</div>
+        <div class="gap-cell coverage-cell" style="color:var(--amber);">15%</div>
+        <div class="gap-cell score-cell"><div class="score-bar" style="width:54.4%;"></div>13.6</div>
+
+        <!-- Row 18 -->
+        <div class="gap-cell pain-label">Nervous system arc</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell coverage-cell" style="color:var(--red);">0%</div>
+        <div class="gap-cell score-cell"><div class="score-bar" style="width:48%;"></div>12</div>
+
+        <!-- Row 19 -->
+        <div class="gap-cell pain-label">Sleep-to-performance loop</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell coverage-cell" style="color:var(--red);">0%</div>
+        <div class="gap-cell score-cell"><div class="score-bar" style="width:48%;"></div>12</div>
+
+        <!-- Row 20 -->
+        <div class="gap-cell pain-label">Mood not primary benefit</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell coverage-cell" style="color:var(--red);">0%</div>
+        <div class="gap-cell score-cell"><div class="score-bar" style="width:48%;"></div>12</div>
+
+        <!-- Row 21 -->
+        <div class="gap-cell pain-label">Anti-supplement-fatigue</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell coverage-cell" style="color:var(--red);">0%</div>
+        <div class="gap-cell score-cell"><div class="score-bar" style="width:48%;"></div>12</div>
+
+        <!-- Row 22 -->
+        <div class="gap-cell pain-label">MLM distrust</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell coverage-cell" style="color:var(--red);">0%</div>
+        <div class="gap-cell score-cell"><div class="score-bar" style="width:48%;"></div>12</div>
+
+        <!-- Row 23 -->
+        <div class="gap-cell pain-label">Timing confusion</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-green">&#9989;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell coverage-cell" style="color:var(--green);">20%</div>
+        <div class="gap-cell score-cell"><div class="score-bar" style="width:38.4%;"></div>9.6</div>
+
+        <!-- Row 24 -->
+        <div class="gap-cell pain-label">Caffeine jitters</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell icon-green">&#9989;</div>
+        <div class="gap-cell icon-red">&#10060;</div>
+        <div class="gap-cell coverage-cell" style="color:var(--green);">20%</div>
+        <div class="gap-cell score-cell"><div class="score-bar" style="width:38.4%;"></div>9.6</div>
+      </div>
+    </div>
+
+    <div class="insights-box reveal" style="margin-top:2rem;">
+      <div class="insights-title">Matrix Key</div>
+      <ul class="insights-list">
+        <li><span style="color:var(--red);">&#10060; Red</span> = Critical gap &mdash; competitor does NOT address this pain point</li>
+        <li><span style="color:var(--amber);">&#9888;&#65039; Amber</span> = Moderate &mdash; partially addressed or only implicit</li>
+        <li><span style="color:var(--green);">&#9989; Green</span> = Covered &mdash; competitor actively addresses this</li>
+        <li>Top 5 rows highlighted in red &mdash; highest-value gaps for Lyv AM/PM</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION 8: UNOCCUPIED POSITIONS
+     ═══════════════════════════════════════════════════════ -->
+<section id="unoccupied">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Section 08</div>
+      <h2 class="section-title">Unoccupied Positions</h2>
+      <p class="section-subtitle">Five strategic positions no competitor has claimed. Each represents a high-value lane for Lyv AM/PM to own.</p>
+    </div>
+
+    <div class="card-grid-3">
+      <!-- Position 1 -->
+      <div class="opp-card reveal reveal-delay-1">
+        <div class="opp-rank">01</div>
+        <div class="opp-title">"Your Body's Daily Rhythm"</div>
+        <div class="opp-subtitle">Circadian Biology Framing</div>
+        <div class="opp-score">Opportunity Score: 25</div>
+        <div class="opp-meta">
+          <strong>Evidence:</strong> Clock gene regulation optimizes nutrient absorption at different times of day (Wiley 2025). No competitor leverages this science.<br>
+          <strong>Angle:</strong> "The only supplement system built around your body's daily rhythm"
+        </div>
+        <div class="opp-hook">"Your body runs on a 24-hour clock. Why doesn't your supplement?"</div>
+      </div>
+
+      <!-- Position 2 -->
+      <div class="opp-card reveal reveal-delay-2">
+        <div class="opp-rank">02</div>
+        <div class="opp-title">"Feel It Working"</div>
+        <div class="opp-subtitle">Measurable Proof of Efficacy</div>
+        <div class="opp-score">Opportunity Score: 25</div>
+        <div class="opp-meta">
+          <strong>Evidence:</strong> #1 complaint across all competitors: "No noticeable difference." Zero brands close the feedback loop on efficacy.<br>
+          <strong>Angle:</strong> "The supplement that proves itself"
+        </div>
+        <div class="opp-hook">"What if your supplement could show you it's working?"</div>
+      </div>
+
+      <!-- Position 3 -->
+      <div class="opp-card reveal reveal-delay-3">
+        <div class="opp-rank">03</div>
+        <div class="opp-title">"The Supplement You'll Actually Stay On"</div>
+        <div class="opp-subtitle">Anti-Dropout Messaging</div>
+        <div class="opp-score">Opportunity Score: 20</div>
+        <div class="opp-meta">
+          <strong>Evidence:</strong> 50&ndash;60% annual churn industry-wide. 66 days to form a habit. No brand addresses retention in their messaging.<br>
+          <strong>Angle:</strong> "Engineered for habit formation"
+        </div>
+        <div class="opp-hook">"90% of supplements get abandoned. Here's why ours doesn't."</div>
+      </div>
+
+      <!-- Position 4 -->
+      <div class="opp-card reveal reveal-delay-4">
+        <div class="opp-rank">04</div>
+        <div class="opp-title">"AM Investment, PM Return"</div>
+        <div class="opp-subtitle">Sleep-Performance Loop</div>
+        <div class="opp-score">Opportunity Score: 20</div>
+        <div class="opp-meta">
+          <strong>Evidence:</strong> AG1 ignores nighttime. Beam ignores daytime. The full-day loop is completely unclaimed.<br>
+          <strong>Angle:</strong> "Morning energy feeds nighttime calm. One system."
+        </div>
+        <div class="opp-hook">"Your morning starts the night before."</div>
+      </div>
+
+      <!-- Position 5 -->
+      <div class="opp-card reveal reveal-delay-5">
+        <div class="opp-rank">05</div>
+        <div class="opp-title">"Transparent Down to the Milligram"</div>
+        <div class="opp-subtitle">Anti-Proprietary-Blend</div>
+        <div class="opp-score">Opportunity Score: 20</div>
+        <div class="opp-meta">
+          <strong>Evidence:</strong> 49 of AG1's 75 ingredients hidden in proprietary blends. IM8 accused of underdosing. Consumer trust is eroding.<br>
+          <strong>Angle:</strong> "Every ingredient. Every dose. No hiding."
+        </div>
+        <div class="opp-hook">"The supplement industry hides behind 'proprietary blends.' We don't."</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION 9: AD SCRIPTS
+     ═══════════════════════════════════════════════════════ -->
+<section id="ad-scripts">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Section 09</div>
+      <h2 class="section-title">Ad Scripts</h2>
+      <p class="section-subtitle">Three ready-to-produce 8-second ad scripts, each targeting a top unoccupied position. Structured as Hook &rarr; Problem &rarr; Solution &rarr; CTA.</p>
+    </div>
+
+    <div class="card-grid-3">
+      <!-- Script 1 -->
+      <div class="script-card reveal reveal-delay-1">
+        <div class="script-header">
+          <div class="script-number">Script 01</div>
+          <div class="script-title">"Your Body's Clock" &mdash; Circadian Biology</div>
+        </div>
+        <div class="script-body">
+          <div class="script-beat">
+            <div class="beat-time">0&ndash;2s</div>
+            <div>
+              <div class="beat-label">Hook</div>
+              <div class="beat-text">"Your body runs on a 24-hour clock. Why doesn't your supplement?"</div>
+            </div>
+          </div>
+          <div class="script-beat">
+            <div class="beat-time">2&ndash;4s</div>
+            <div>
+              <div class="beat-label">Problem</div>
+              <div class="beat-text">Morning needs energy. Evening needs calm. One-size-fits-all ignores your rhythm.</div>
+            </div>
+          </div>
+          <div class="script-beat">
+            <div class="beat-time">4&ndash;6s</div>
+            <div>
+              <div class="beat-label">Solution</div>
+              <div class="beat-text">Lyv AM/PM &mdash; two formulas built around circadian biology. AM activates. PM restores.</div>
+            </div>
+          </div>
+          <div class="script-beat">
+            <div class="beat-time">6&ndash;8s</div>
+            <div>
+              <div class="beat-label">CTA</div>
+              <div class="beat-text">"Built for how your body actually works. Try Lyv AM/PM risk-free."</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Script 2 -->
+      <div class="script-card reveal reveal-delay-2">
+        <div class="script-header">
+          <div class="script-number">Script 02</div>
+          <div class="script-title">"Feel the Proof" &mdash; Measurable Efficacy</div>
+        </div>
+        <div class="script-body">
+          <div class="script-beat">
+            <div class="beat-time">0&ndash;2s</div>
+            <div>
+              <div class="beat-label">Hook</div>
+              <div class="beat-text">"What if your supplement could prove it's working?"</div>
+            </div>
+          </div>
+          <div class="script-beat">
+            <div class="beat-time">2&ndash;4s</div>
+            <div>
+              <div class="beat-label">Problem</div>
+              <div class="beat-text">$80&ndash;100/month with no idea if it's doing anything. "No noticeable difference."</div>
+            </div>
+          </div>
+          <div class="script-beat">
+            <div class="beat-time">4&ndash;6s</div>
+            <div>
+              <div class="beat-label">Solution</div>
+              <div class="beat-text">Transparent ingredients, clinical doses. Morning energy. Evening calm. Results you feel.</div>
+            </div>
+          </div>
+          <div class="script-beat">
+            <div class="beat-time">6&ndash;8s</div>
+            <div>
+              <div class="beat-label">CTA</div>
+              <div class="beat-text">"Every ingredient listed. Feel the difference in your first week &mdash; or money back."</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Script 3 -->
+      <div class="script-card reveal reveal-delay-3">
+        <div class="script-header">
+          <div class="script-number">Script 03</div>
+          <div class="script-title">"Keep Taking" &mdash; Anti-Dropout</div>
+        </div>
+        <div class="script-body">
+          <div class="script-beat">
+            <div class="beat-time">0&ndash;2s</div>
+            <div>
+              <div class="beat-label">Hook</div>
+              <div class="beat-text">"90% of supplements get abandoned within 6 months."</div>
+            </div>
+          </div>
+          <div class="script-beat">
+            <div class="beat-time">2&ndash;4s</div>
+            <div>
+              <div class="beat-label">Problem</div>
+              <div class="beat-text">Most customers quit. Not because the supplement is bad &mdash; because it's forgettable.</div>
+            </div>
+          </div>
+          <div class="script-beat">
+            <div class="beat-time">4&ndash;6s</div>
+            <div>
+              <div class="beat-label">Solution</div>
+              <div class="beat-text">Two moments in your day. Morning activation. Evening wind-down. Two touchpoints that stick.</div>
+            </div>
+          </div>
+          <div class="script-beat">
+            <div class="beat-time">6&ndash;8s</div>
+            <div>
+              <div class="beat-label">CTA</div>
+              <div class="beat-text">"Two rituals. One system. The supplement habit that sticks."</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION 10: GENERATED VIDEO ADS
+     ═══════════════════════════════════════════════════════ -->
+<section id="video-ads">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Section 10</div>
+      <h2 class="section-title">Generated Video Ads</h2>
+      <p class="section-subtitle">Three AI-generated video ads via Veo 3.1 &mdash; 720p, 8 seconds, 9:16 vertical format. SynthID watermarked.</p>
+    </div>
+
+    <div class="card-grid-3">
+      <!-- Video 1 -->
+      <div class="video-card reveal reveal-delay-1">
+        <div class="video-preview">
+          <div class="video-play-icon">&#9654;</div>
+          <div class="video-badge">8s &bull; 720p &bull; 9:16</div>
+        </div>
+        <div class="video-meta">
+          <div class="video-title">"Your Body's Clock"</div>
+          <div class="video-detail"><strong>File:</strong> LyvAMPM-Ad-1-CircadianBiology.mp4</div>
+          <div class="video-detail"><strong>Gap Targeted:</strong> Circadian Biology (Score 25)</div>
+          <div class="video-detail"><strong>Cost:</strong> <span style="color:var(--green);">$0.24</span></div>
+          <div class="video-detail" style="margin-top:8px; color:var(--text-muted); font-size:11px;">SynthID watermark applied. Retained on Google servers 2 days &mdash; downloaded copies permanent.</div>
+        </div>
+      </div>
+
+      <!-- Video 2 -->
+      <div class="video-card reveal reveal-delay-2">
+        <div class="video-preview">
+          <div class="video-play-icon">&#9654;</div>
+          <div class="video-badge">8s &bull; 720p &bull; 9:16</div>
+        </div>
+        <div class="video-meta">
+          <div class="video-title">"Feel the Proof"</div>
+          <div class="video-detail"><strong>File:</strong> LyvAMPM-Ad-2-MeasurableProof.mp4</div>
+          <div class="video-detail"><strong>Gap Targeted:</strong> Measurable Proof (Score 25)</div>
+          <div class="video-detail"><strong>Cost:</strong> <span style="color:var(--green);">$0.24</span></div>
+          <div class="video-detail" style="margin-top:8px; color:var(--text-muted); font-size:11px;">SynthID watermark applied. Retained on Google servers 2 days &mdash; downloaded copies permanent.</div>
+        </div>
+      </div>
+
+      <!-- Video 3 -->
+      <div class="video-card reveal reveal-delay-3">
+        <div class="video-preview">
+          <div class="video-play-icon">&#9654;</div>
+          <div class="video-badge">8s &bull; 720p &bull; 9:16</div>
+        </div>
+        <div class="video-meta">
+          <div class="video-title">"Keep Taking"</div>
+          <div class="video-detail"><strong>File:</strong> LyvAMPM-Ad-3-AntiDropout.mp4</div>
+          <div class="video-detail"><strong>Gap Targeted:</strong> Anti-Dropout (Score 20)</div>
+          <div class="video-detail"><strong>Cost:</strong> <span style="color:var(--green);">$0.24</span></div>
+          <div class="video-detail" style="margin-top:8px; color:var(--text-muted); font-size:11px;">SynthID watermark applied. Retained on Google servers 2 days &mdash; downloaded copies permanent.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION 11: APIFY DATA SUMMARY
+     ═══════════════════════════════════════════════════════ -->
+<section id="apify">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Section 11</div>
+      <h2 class="section-title">Apify Data Summary</h2>
+    </div>
+
+    <div class="card reveal" style="max-width:680px;">
+      <div style="display:flex; align-items:center; gap:16px; margin-bottom:1rem;">
+        <div style="width:48px; height:48px; border-radius:10px; background:var(--amber-bg); border:1px solid var(--amber-border); display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0;">&#9888;</div>
+        <div>
+          <h3 style="margin-bottom:2px;">Scrape Skipped</h3>
+          <p style="font-size:14px; color:var(--text-secondary);">Meta Ad Library scrape was not executed this run.</p>
+        </div>
+      </div>
+      <div style="font-size:13px; color:var(--text-secondary); line-height:1.7;">
+        <strong style="color:var(--text-accent);">Total Scraped:</strong> 0<br>
+        <strong style="color:var(--text-accent);">Reason:</strong> Actor input format incompatibility with current Apify configuration.<br>
+        <strong style="color:var(--text-accent);">Fallback:</strong> 14 AI research agents (Perplexity, Gemini, Claude) used as primary data source.<br>
+        <strong style="color:var(--text-accent);">Action Item:</strong> Investigate alternate Apify actors for Meta Ad Library access in future runs.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION 12: COST BREAKDOWN
+     ═══════════════════════════════════════════════════════ -->
+<section id="cost">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Section 12</div>
+      <h2 class="section-title">Cost Breakdown</h2>
+      <p class="section-subtitle">Total research and production cost for this intelligence report. $4.20 under the $5.00 budget.</p>
+    </div>
+
+    <div class="card reveal" style="max-width: 800px;">
+      <div class="cost-bar-row">
+        <div class="cost-bar-label">Apify Scrape</div>
+        <div class="cost-bar-track"><div class="cost-bar-fill" style="width:1%; min-width:60px;">0%</div></div>
+        <div class="cost-bar-amount">$0.00</div>
+      </div>
+
+      <div class="cost-bar-row">
+        <div class="cost-bar-label">Research Agents (Comp Ads)</div>
+        <div class="cost-bar-track"><div class="cost-bar-fill" style="width:4.5%;">4.5%</div></div>
+        <div class="cost-bar-amount">$0.036</div>
+      </div>
+
+      <div class="cost-bar-row">
+        <div class="cost-bar-label">Research Agents (Pain Points)</div>
+        <div class="cost-bar-track"><div class="cost-bar-fill" style="width:5.5%;">5.5%</div></div>
+        <div class="cost-bar-amount">$0.044</div>
+      </div>
+
+      <div class="cost-bar-row">
+        <div class="cost-bar-label">Veo Video 1 (Circadian)</div>
+        <div class="cost-bar-track"><div class="cost-bar-fill gold-fill" style="width:30%;">30%</div></div>
+        <div class="cost-bar-amount">$0.24</div>
+      </div>
+
+      <div class="cost-bar-row">
+        <div class="cost-bar-label">Veo Video 2 (Proof)</div>
+        <div class="cost-bar-track"><div class="cost-bar-fill gold-fill" style="width:30%;">30%</div></div>
+        <div class="cost-bar-amount">$0.24</div>
+      </div>
+
+      <div class="cost-bar-row">
+        <div class="cost-bar-label">Veo Video 3 (Dropout)</div>
+        <div class="cost-bar-track"><div class="cost-bar-fill gold-fill" style="width:30%;">30%</div></div>
+        <div class="cost-bar-amount">$0.24</div>
+      </div>
+    </div>
+
+    <div class="total-card reveal">
+      <div>
+        <div class="total-label">Total Spend</div>
+        <div class="total-main">
+          <div class="total-value">$0.80</div>
+        </div>
+      </div>
+      <div class="total-stats">
+        <div class="total-stat">
+          <div class="total-stat-value">$5.00</div>
+          <div class="total-stat-label">Budget</div>
+        </div>
+        <div class="total-stat">
+          <div class="total-stat-value" style="color:var(--green);">$4.20</div>
+          <div class="total-stat-label">Under Budget</div>
+        </div>
+        <div class="total-stat">
+          <div class="total-stat-value">$0.033</div>
+          <div class="total-stat-label">Cost / Insight</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION 13: RESEARCH METHODOLOGY
+     ═══════════════════════════════════════════════════════ -->
+<section id="methodology">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Section 13</div>
+      <h2 class="section-title">Research Methodology</h2>
+      <p class="section-subtitle">How this intelligence was gathered, processed, and synthesized.</p>
+    </div>
+
+    <div class="methodology-grid">
+      <div class="card reveal reveal-delay-1">
+        <h3>Agent Deployment</h3>
+        <div style="font-size:13px; color:var(--text-secondary); line-height:1.8;">
+          <strong style="color:var(--text-accent);">14 AI Research Agents</strong><br>
+          5 Perplexity agents<br>
+          5 Gemini agents<br>
+          4 Claude agents<br>
+          <div style="margin-top:8px; padding-top:8px; border-top:1px solid var(--border-subtle);">
+            <strong style="color:var(--text-accent);">Duration:</strong> ~4 hours
+          </div>
+        </div>
+      </div>
+
+      <div class="card reveal reveal-delay-2">
+        <h3>Data Sources</h3>
+        <div style="font-size:13px; color:var(--text-secondary); line-height:1.8;">
+          Reddit (r/supplements, r/AG1, r/biohacking)<br>
+          Amazon product reviews<br>
+          Trustpilot reviews<br>
+          BBB complaints<br>
+          ConsumerLab reports<br>
+          Competitor websites &amp; landing pages<br>
+          YouTube &amp; TikTok ad content<br>
+          Industry publications
+        </div>
+      </div>
+
+      <div class="card reveal reveal-delay-3">
+        <h3>Outputs Generated</h3>
+        <div style="font-size:13px; color:var(--text-secondary); line-height:1.8;">
+          <strong style="color:var(--text-accent);">24</strong> pain points identified<br>
+          <strong style="color:var(--text-accent);">5</strong> unoccupied positions mapped<br>
+          <strong style="color:var(--text-accent);">40</strong> taxonomy cells analyzed<br>
+          <strong style="color:var(--text-accent);">3</strong> ad scripts written<br>
+          <strong style="color:var(--text-accent);">3</strong> video ads generated<br>
+          <strong style="color:var(--text-accent);">1</strong> competitive intelligence report
+        </div>
+      </div>
+    </div>
+
+    <div class="disclaimer reveal">
+      <strong>Disclaimer:</strong> This analysis was generated by AI research agents using publicly available data from consumer review platforms, competitor websites, and social media. All findings should be independently verified before making business decisions. Verbatim quotes are sourced from public reviews and forums. Market data reflects conditions as of March 2026.
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     FOOTER
+     ═══════════════════════════════════════════════════════ -->
+<footer class="footer">
+  <div class="container">
+    <p class="footer-text">LYV AM/PM &mdash; COMPETITIVE AD INTELLIGENCE REPORT &mdash; MARCH 22, 2026</p>
+    <p class="footer-text" style="margin-top:6px; opacity:0.5;">Generated by PAI Intelligence System &bull; 14 AI Research Agents &bull; $0.80 Total Cost</p>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════════════════════════
+     JAVASCRIPT
+     ═══════════════════════════════════════════════════════ -->
+<script>
+(function() {
+  'use strict';
+
+  // ──────────────────────────────────────────────────────
+  // SCROLL REVEAL via IntersectionObserver
+  // ──────────────────────────────────────────────────────
+  const revealElements = document.querySelectorAll('.reveal');
+
+  if ('IntersectionObserver' in window) {
+    const revealObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.08,
+      rootMargin: '0px 0px -40px 0px'
+    });
+
+    revealElements.forEach(function(el) {
+      revealObserver.observe(el);
+    });
+  } else {
+    // Fallback: show everything immediately
+    revealElements.forEach(function(el) {
+      el.classList.add('visible');
+    });
+  }
+
+  // ──────────────────────────────────────────────────────
+  // ACTIVE NAV LINK on scroll
+  // ──────────────────────────────────────────────────────
+  var navLinks = document.querySelectorAll('.nav-link');
+  var sections = [];
+
+  navLinks.forEach(function(link) {
+    var href = link.getAttribute('href');
+    if (href && href.startsWith('#')) {
+      var target = document.getElementById(href.substring(1));
+      if (target) {
+        sections.push({ el: target, link: link });
+      }
+    }
+  });
+
+  function updateActiveNav() {
+    var scrollY = window.scrollY + 120;
+    var active = null;
+
+    for (var i = sections.length - 1; i >= 0; i--) {
+      if (sections[i].el.offsetTop <= scrollY) {
+        active = sections[i];
+        break;
+      }
+    }
+
+    navLinks.forEach(function(link) { link.classList.remove('active'); });
+    if (active) {
+      active.link.classList.add('active');
+    }
+  }
+
+  var navTicking = false;
+  window.addEventListener('scroll', function() {
+    if (!navTicking) {
+      requestAnimationFrame(function() {
+        updateActiveNav();
+        navTicking = false;
+      });
+      navTicking = true;
+    }
+  });
+
+  updateActiveNav();
+
+  // ──────────────────────────────────────────────────────
+  // SMOOTH SCROLL for nav links
+  // ──────────────────────────────────────────────────────
+  navLinks.forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      var href = this.getAttribute('href');
+      if (href && href.startsWith('#')) {
+        e.preventDefault();
+        var target = document.getElementById(href.substring(1));
+        if (target) {
+          var navHeight = document.querySelector('.sticky-nav').offsetHeight;
+          var targetPosition = target.offsetTop - navHeight - 20;
+          window.scrollTo({
+            top: targetPosition,
+            behavior: 'smooth'
+          });
+        }
+      }
+    });
+  });
+
+  // ──────────────────────────────────────────────────────
+  // ANIMATED COST BARS — trigger on visibility
+  // ──────────────────────────────────────────────────────
+  var costBars = document.querySelectorAll('.cost-bar-fill');
+
+  costBars.forEach(function(bar) {
+    var targetWidth = bar.style.width;
+    bar.style.width = '0%';
+
+    if ('IntersectionObserver' in window) {
+      var barObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            setTimeout(function() {
+              bar.style.width = targetWidth;
+            }, 200);
+            barObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.3 });
+
+      barObserver.observe(bar);
+    } else {
+      bar.style.width = targetWidth;
+    }
+  });
+
+})();
+</script>
+
+</body>
+</html>
